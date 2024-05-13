@@ -20,7 +20,7 @@
     <header>
         <nav>
             <a href="https://aso2301125.icurus.jp/tomodachi/PHP/home.php">           
-                <img src="../CSS/copuruLogo.png" alt="ロゴ">
+                <img src="../CSS/copuruLogo.jpg" alt="ロゴ">
             </a>
         </nav>
     <header>
