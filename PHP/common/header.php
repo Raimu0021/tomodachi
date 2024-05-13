@@ -17,3 +17,23 @@
     <title>coプル</title>
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="https://aso2301125.icurus.jp/tomodachi/PHP/home.php">           
+                <img src="../CSS/copuruLogo.png" alt="ロゴ">
+            </a>
+        </nav>
+    <header>
+
+    <style>
+        header {
+            width: 300px;
+            height: 100%;
+            border: solid #DADADA 1px;
+            background-color: #000000;
+        }
+
+        header img {
+            width: 100%;
+        }
+    </style>
