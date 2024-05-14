@@ -1,0 +1,41 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif; /* フォントスタイルを指定 */
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 200px; /* サイドバーの幅 */
+    height: 100%;
+    background-color: #fff; /* 背景色 */
+    box-sizing: border-box;
+    border-right: 1px solid #ccc; /* 右側に境界線を追加 */
+}
+
+.logo {
+    display: block;
+    margin: 10px auto; /* ロゴの位置を中央に */
+    width: 80%; /* ロゴの幅 */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0; /* リスト全体の余白 */
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 10px 20px; /* リンクのパディング */
+    color: #333; /* テキストカラー */
+    text-decoration: none; /* アンダーラインを非表示に */
+    font-size: 16px; /* フォントサイズ */
+}
+
+.sidebar ul li a:hover {
+    background-color: #f4f4f4; /* ホバー時の背景色 */
+}
