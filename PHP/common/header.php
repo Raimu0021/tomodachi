@@ -1,39 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-        rel="stylesheet" 
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" 
-        crossorigin="anonymous"
-    >
-    <script 
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" 
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" 
-        crossorigin="anonymous">
-    </script>
-    <title>coプル</title>
+    <title>サイドバー</title>
+    <link rel="stylesheet" href="header.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="https://aso2301125.icurus.jp/tomodachi/PHP/home.php">           
-                <img src="../CSS/copuruLogo.jpg" alt="ロゴ">
-            </a>
-        </nav>
-    <header>
+    <div class="sidebar">
+        <img src="path/to/your/logo.png" alt="ロゴ" class="logo"> <!-- 画像のパスを指定 -->
+        <ul>
+            <li><a href="#">ホーム</a></li>
+            <li><a href="#">通知</a></li>
+            <li><a href="#">デート</a></li>
+            <li><a href="#">メッセージ</a></li>
+            <li><a href="#">設定</a></li>
+            <li><a href="#">プロフィール</a></li>
+        </ul>
+    </div>
+</body>
+</html>
 
-    <style>
-        header {
-            width: 300px;
-            height: 100%;
-            border: solid #DADADA 1px;
-            background-color: #000000;
-        }
-
-        header img {
-            width: 100%;
-        }
-    </style>
