@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="sidebar">
-        <img src="./css/copuruLogo.jpg" alt="ロゴ" class="logo">
+        <img src="../css/copuruLogo.jpg" alt="ロゴ" class="logo">
         <ul>
             <li><a href="#">ホーム</a></li>
             <li><a href="#">通知</a></li>
