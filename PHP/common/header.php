@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="sidebar">
-        <img src="path/to/your/logo.png" alt="ロゴ" class="logo"> <!-- 画像のパスを指定 -->
+        <img src="path/to/your/logo.png" alt="ロゴ" class="logo">
         <ul>
             <li><a href="#">ホーム</a></li>
             <li><a href="#">通知</a></li>
@@ -17,6 +17,5 @@
             <li><a href="#">プロフィール</a></li>
         </ul>
     </div>
-</body>
-</html>
+
 
