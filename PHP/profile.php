@@ -1,4 +1,4 @@
-<?php require './common/header.php'; ?>
+<?php require 'common/header.php'; ?>
 <div class="container">
     <div class="profile">
         <img id="profileImage" src="" alt="プロフィール画像">
@@ -54,4 +54,4 @@
         border-radius: 5px;
     }
 </style>
-<?php require './footer.php'?>
+<?php require 'common/footer.php'?>

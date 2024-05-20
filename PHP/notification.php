@@ -1,4 +1,4 @@
-<?php require './header.php'?>
+<?php require 'common/header.php'?>
 <div class="notification">
 
 </div>
@@ -11,4 +11,4 @@
         border: solid #DADADA 2px;
     }
 </style>
-<?php require './footer.php'?>
+<?php require 'common/footer.php'?>
