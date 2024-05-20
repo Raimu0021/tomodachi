@@ -9,7 +9,7 @@
         <p>自己紹介: <span id="profileBio">こんにちは</span></p>
     </div>
     <div class="edit-profile">
-        <a href="profilehenshu.html">プロフィールを編集</a>
+        <a href="profile_edit.php">プロフィールを編集</a>
     </div>
 </div>
 <style>
@@ -54,26 +54,4 @@
         border-radius: 5px;
     }
 </style>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const name = localStorage.getItem('profile_name') || 'John Doe';
-        const ageGender = localStorage.getItem('profile_ageGender') || '25歳 / 男性';
-        const school = localStorage.getItem('profile_school') || 'Example University';
-        const grade = localStorage.getItem('profile_grade') || '3年生';
-        const bio = localStorage.getItem('profile_bio') || 'こんにちは';
-        const profileImage = localStorage.getItem('profile_image');
-        
-        document.getElementById('profileName').textContent = name;
-        document.getElementById('profileAgeGender').textContent = ageGender;
-        document.getElementById('profileSchool').textContent = school;
-        document.getElementById('profileGrade').textContent = grade;
-        document.getElementById('profileBio').textContent = bio;
-
-        if (profileImage) {
-            document.getElementById('profileImage').src = profileImage;
-        } else {
-            document.getElementById('profileImage').src = 'path/to/default-profile-image.jpg';
-        }
-    });
-    </script>
 <?php require './footer.php'?>
