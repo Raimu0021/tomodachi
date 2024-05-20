@@ -25,7 +25,7 @@
             <li><a href="./date.php">デート</a></li>
             <li><a href="./messege.php">メッセージ</a></li>
             <li><a href="./setting.php">設定</a></li>
-            <li id="profile"><a href="#">プロフィール</a></li>
+            <li id="profile"><a href="#./profile">プロフィール</a></li>
         </ul>
     </div>
 
