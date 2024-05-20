@@ -3,29 +3,26 @@
 <head>
     <meta charset="utf-8">
     <title>ログイン</title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="../CSS/login.css">
 </head>
 <body>
+<div class="flexbox">
     <div class="content">
-        <form action="" method="POST">
+        <form action="home.php" method="POST">
             <p>あなたの出会いをサポートします</p>
             <br>
-            <div class="control">
-                <p>メールアドレス</p>
-                <input type="email" name="email">
-            </div>
+                <p>メールアドレス<br>
+                <input type="email" name="email"></p>
  
-            <div class="control">
-                <p>パスワード</p>
-                <input type="password" name="password">
-            </div>
+                <p>パスワード<br>
+                <input type="password" name="password"><br>
+                <a href="">パスワードの変更</a></p><br>
  
-            <div class="control">
                 <button type="submit" class="btn">ログイン</button>
-            </div>
         </form>
-        <p>今すぐ出会いが欲しいですか？
+    </div><br>
+        <p class="box">今すぐ出会いが欲しいですか？
         <a href="signup.php"><button class="btn">新規登録</button></a></p>
-    </div>
+</div>
 </body>
 </html>
