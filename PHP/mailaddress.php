@@ -37,16 +37,6 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 ?>
-
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>メールアドレス変更</title>
-    <link rel="stylesheet" href="mailaddress.css">
-</head>
-<body>
     <div class="container">
         <h1>メールアドレス変更</h1>
         <?php if (!empty($message)): ?>
