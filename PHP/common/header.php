@@ -21,12 +21,34 @@
         </a>
         <ul>
             <li><a href="./home.php">ホーム</a></li>
-            <li><a href="./notification.php">通知</a></li>
+            <li><a href="./notification.php" id="noti">通知</a></li>
             <li><a href="./date.php">デート</a></li>
             <li><a href="./messege.php">メッセージ</a></li>
             <li><a href="./setting.php">設定</a></li>
             <li id="profile"><a href="./profile">プロフィール</a></li>
         </ul>
-    </div>
+        <div class="notification">
+            <?php require "./notification.php";?>
+        </div>
 
+
+        <style>
+            .notification {
+                display: none;
+            }
+        
+        .open {
+            width: 250px;
+            transform: translatex(300px);
+            border: solid #DADADA 2px;
+        }
+        </style>
+
+        <script>
+            const noti = document.getElementaryById("noti");
+            noti.document.addEventlist("Click",()=>{
+                noti.classList.toggle("open");
+            })
+        </script>
+    </div>
 
