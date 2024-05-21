@@ -1,3 +1,4 @@
+<?php require 'common/header.php'?>
 <?php
 include 'db-connect.php';
 
@@ -67,5 +68,4 @@ $conn->close();
             <button type="submit">変更する</button>
         </form>
     </div>
-</body>
-</html>
+<?php require 'common/footer.php' ?>
