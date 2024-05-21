@@ -1,14 +1,17 @@
 <?php require 'common/header.php'?>
 <div class="notification">
-
+    <label>新規通知</label>
 </div>
-<iframe src="home.php" frameborder="0"></iframe>
+
 <style>
-    div{
-        border: solid #DADADA 2px;
-    }
-    iframe{
+    .notification {
+        transform: translatex(300px);
         border: solid #DADADA 2px;
     }
 </style>
-<?php require 'common/footer.php'?>
+
+<?php
+require 'home.php';
+require 'common/footer.php';
+?>
+
