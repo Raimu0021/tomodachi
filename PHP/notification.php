@@ -1,4 +1,4 @@
-<?php require 'common/header.php';?>
+<?php require 'common/header.php'?>
 <div class="notification">
     <label>新規通知</label>
 </div>
@@ -14,3 +14,4 @@
 require 'home.php';
 require 'common/footer.php';
 ?>
+
