@@ -121,6 +121,7 @@ $conn = null;
     </style>
 </head>
 <body>
+
     <div class="container">
         <h1>メールアドレス変更</h1>
         <?php if (!empty($message)): ?>

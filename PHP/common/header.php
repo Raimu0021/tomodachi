@@ -1,8 +1,6 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>サイドバー</title>
     <link rel="stylesheet" href="../CSS/header.css">
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
@@ -27,7 +25,7 @@
             <li><a href="./date.php">デート</a></li>
             <li><a href="./messege.php">メッセージ</a></li>
             <li><a href="./setting.php">設定</a></li>
-            <li id="profile"><a href="#">プロフィール</a></li>
+            <li id="profile"><a href="./profile">プロフィール</a></li>
         </ul>
     </div>
 
