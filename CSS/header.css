@@ -7,7 +7,7 @@ html {
 }
 
 body > *:not(.sidebar) {
-  margin-left: 300px;  /* ナビゲーションバーの幅と同じ */
+  margin-left: 300px; /* ナビゲーションバーの幅と同じ */
 }
 
 .sidebar {
