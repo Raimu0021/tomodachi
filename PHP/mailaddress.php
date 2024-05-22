@@ -1,5 +1,8 @@
-<?php require 'common/header.php'?>
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+require 'common/header.php';
 include 'common/db-connect.php';
 
 try {
@@ -146,3 +149,4 @@ $conn = null;
 <?php require 'common/footer.php' ?>
 </body>
 </html>
+
