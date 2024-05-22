@@ -1,6 +1,13 @@
 <?php require 'common/header.php'?>
 <?php
-include 'db-connect.php';
+include 'common/db-connect.php';
+
+try {
+    $conn = new PDO($connect, USER, PASS);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
+}
 
 $user_id = 1;
 
@@ -9,33 +16,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirm_email = $_POST['confirm-email'];
 
     if ($new_email === $confirm_email) {
-        $sql = "UPDATE users SET email = ? WHERE id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("si", $new_email, $user_id);
+        try {
+            $sql = "UPDATE users SET email = :email WHERE id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':email', $new_email);
+            $stmt->bindParam(':id', $user_id, PDO::PARAM_INT);
 
-        if ($stmt->execute()) {
-            $message = "メールアドレスが正常に変更されました。";
-        } else {
-            $message = "メールアドレスの変更に失敗しました: " . $conn->error;
+            if ($stmt->execute()) {
+                $message = "メールアドレスが正常に変更されました。";
+            } else {
+                $message = "メールアドレスの変更に失敗しました。";
+            }
+        } catch (PDOException $e) {
+            $message = "メールアドレスの変更に失敗しました: " . $e->getMessage();
         }
-
-        $stmt->close();
     } else {
         $message = "新しいメールアドレスが一致しません。";
     }
 }
-$sql = "SELECT email FROM users WHERE id = $user_id";
-$result = $conn->query($sql);
-$current_email = "";
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $current_email = $row['email'];
-} else {
-    $current_email = "メールアドレスが見つかりません。";
+try {
+    $sql = "SELECT email FROM users WHERE id = :id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $current_email = $result ? $result['email'] : "メールアドレスが見つかりません。";
+} catch (PDOException $e) {
+    $current_email = "エラーが発生しました: " . $e->getMessage();
 }
 
-$conn->close();
+$conn = null;
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +55,70 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>メールアドレス変更</title>
-    <link rel="stylesheet" href="mailaddress.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f8f8;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            color: #f00;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -69,3 +143,5 @@ $conn->close();
         </form>
     </div>
 <?php require 'common/footer.php' ?>
+</body>
+</html>
