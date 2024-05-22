@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <form action="change_email.php" method="get">
+        <form action="mailaddress.php" method="get">
             <button type="submit">メールアドレス変更</button>
         </form>
         <form action="change_password.php" method="get">
