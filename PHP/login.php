@@ -9,6 +9,7 @@
 <div class="flexbox">
     <div class="content">
         <form action="home.php" method="POST">
+        <img src="../CSS/copuruLogo.jpg" alt="ロゴ" class="logo">
             <p>あなたの出会いをサポートします</p>
             <br>
                 <p>メールアドレス<br>

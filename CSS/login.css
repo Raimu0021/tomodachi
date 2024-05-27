@@ -18,3 +18,9 @@ body {
      border: black 1px solid; 
     padding:10px;
  }
+ .logo {
+    display: block;
+    margin-inline: 10px auto;
+    width: 50px;
+    height: 50px;
+  }
