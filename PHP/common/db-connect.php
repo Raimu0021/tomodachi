@@ -4,9 +4,13 @@
     const USER = 'LAA1521164';
     const PASS = 'asojuku';
 
-    $connect = 'mysql:host='. SERVER .";dbname=".  DBNAME .';charset=utf8';
+    $dsn = 'mysql:host='. SERVER .";dbname=".  DBNAME .';charset=utf8';
     
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    try {
+        $conn = new PDO($dsn, USER, PASS);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch(PDOException $e) {
+        die("Connection failed: " . $e->getMessage());
     }
+?>
 ?>
