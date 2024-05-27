@@ -11,7 +11,7 @@
         <form action="mailaddress.php" method="get">
             <button type="submit">メールアドレス変更</button>
         </form>
-        <form action="change_password.php" method="get">
+        <form action="password.php" method="get">
             <button type="submit">パスワード変更</button>
         </form>
         <form action="delete_account.php" method="get">
