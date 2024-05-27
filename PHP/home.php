@@ -1,4 +1,5 @@
 <?php require './common/header.php' ?>
+<?php require './common/card_component.php' ?>
 
 <form action="search.php" method="get">
     <input type="text" name="school_name" placeholder="学校名を入力">
