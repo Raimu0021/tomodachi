@@ -1,12 +1,29 @@
-<?php require 'common/header.php'; ?>
+<?php
+require 'db-connect.php';
+require 'common/header.php';
+
+// ユーザーIDはセッションやクッキーから取得することを想定（例：1）
+$user_id = 1;
+
+// プロフィール情報を取得
+$stmt = $pdo->prepare("SELECT * FROM profiles WHERE user_id = :user_id");
+$stmt->execute(['user_id' => $user_id]);
+$profile = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$profile) {
+    echo "プロフィール情報が見つかりませんでした。";
+    exit;
+}
+?>
+
 <div class="container">
     <div class="profile">
-        <img id="profileImage" src="" alt="プロフィール画像">
-        <p>名前: <span id="profileName">John Doe</span></p>
-        <p>年齢/性別: <span id="profileAgeGender">25歳 / 男性</span></p>
-        <p>学校: <span id="profileSchool">Example University</span></p>
-        <p>学年: <span id="profileGrade">3年生</span></p>
-        <p>自己紹介: <span id="profileBio">こんにちは</span></p>
+        <img id="profileImage" src="<?= htmlspecialchars($profile['profile_image']) ?>" alt="プロフィール画像">
+        <p>名前: <span id="profileName"><?= htmlspecialchars($profile['name']) ?></span></p>
+        <p>年齢/性別: <span id="profileAgeGender"><?= htmlspecialchars($profile['age_gender']) ?></span></p>
+        <p>学校: <span id="profileSchool"><?= htmlspecialchars($profile['school']) ?></span></p>
+        <p>学年: <span id="profileGrade"><?= htmlspecialchars($profile['grade']) ?></span></p>
+        <p>自己紹介: <span id="profileBio"><?= htmlspecialchars($profile['bio']) ?></span></p>
     </div>
     <div class="edit-profile">
         <a href="profile_edit.php">プロフィールを編集</a>
@@ -54,4 +71,4 @@
         border-radius: 5px;
     }
 </style>
-<?php require 'common/footer.php'?>
+<?php require 'common/footer.php'; ?>
