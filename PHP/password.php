@@ -77,20 +77,14 @@ include 'common/db-connect.php';
         <?php endif; ?>
         <form action="" method="POST">
             <div class="form-group">
-                <label for="current-email">現在のメールアドレス</label>
-                <input type="text" id="current-email" name="current-email" value="<?php echo htmlspecialchars($current_email); ?>" readonly>
+                <label for="new-password">新しいパスワード</label>
+                <input type="password" id="new-password" name="new-password" required>
             </div>
             <div class="form-group">
-                <label for="new-email">新しいメールアドレス</label>
-                <input type="email" id="new-email" name="new-email" required>
-            </div>
-            <div class="form-group">
-                <label for="confirm-email">新しいメールアドレス確認</label>
-                <input type="email" id="confirm-email" name="confirm-email" required>
+                <label for="confirm-password">新しいパスワード確認</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
             </div>
             <button type="submit">変更する</button>
         </form>
     </div>
 <?php require 'common/footer.php' ?>
-
-
