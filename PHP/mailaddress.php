@@ -4,60 +4,7 @@ ini_set('display_errors', 1);
 
 require 'common/header.php';
 include 'common/db-connect.php';
-
-try {
-    $conn = new PDO($connect, USER, PASS);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
-
-$user_id = 1;
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $new_email = $_POST['new-email'];
-    $confirm_email = $_POST['confirm-email'];
-
-    if ($new_email === $confirm_email) {
-        try {
-            $sql = "UPDATE users SET email = :email WHERE id = :id";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':email', $new_email);
-            $stmt->bindParam(':id', $user_id, PDO::PARAM_INT);
-
-            if ($stmt->execute()) {
-                $message = "メールアドレスが正常に変更されました。";
-            } else {
-                $message = "メールアドレスの変更に失敗しました。";
-            }
-        } catch (PDOException $e) {
-            $message = "メールアドレスの変更に失敗しました: " . $e->getMessage();
-        }
-    } else {
-        $message = "新しいメールアドレスが一致しません。";
-    }
-}
-
-try {
-    $sql = "SELECT email FROM users WHERE id = :id";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $current_email = $result ? $result['email'] : "メールアドレスが見つかりません。";
-} catch (PDOException $e) {
-    $current_email = "エラーが発生しました: " . $e->getMessage();
-}
-
-$conn = null;
 ?>
-
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>メールアドレス変更</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -122,8 +69,6 @@ $conn = null;
             color: #f00;
         }
     </style>
-</head>
-<body>
 
     <div class="container">
         <h1>メールアドレス変更</h1>
@@ -147,6 +92,5 @@ $conn = null;
         </form>
     </div>
 <?php require 'common/footer.php' ?>
-</body>
-</html>
+
 
