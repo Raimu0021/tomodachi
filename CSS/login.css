@@ -1,0 +1,20 @@
+body {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.flexbox{
+    align-items: flex-center;
+  }
+.content{
+    border: black 1px solid; 
+    padding:10px;
+    }
+.box{
+     border: black 1px solid; 
+    padding:10px;
+ }

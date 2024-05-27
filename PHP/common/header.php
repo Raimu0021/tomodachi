@@ -1,8 +1,6 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>サイドバー</title>
     <link rel="stylesheet" href="../CSS/header.css">
     <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link
@@ -24,12 +22,37 @@
         </a>
         <ul>
             <li><a href="./home.php">ホーム</a></li>
-            <li><a href="./notification.php">通知</a></li>
+            <li><a href="#" id="noti">通知</a></li>
             <li><a href="./date.php">デート</a></li>
             <li><a href="./messege.php">メッセージ</a></li>
             <li><a href="./setting.php">設定</a></li>
-            <li id="profile"><a href="#">プロフィール</a></li>
+            <li id="profile"><a href="./profile">プロフィール</a></li>
         </ul>
+        
     </div>
+    <div class="notification" style="display:none;">
+            <?php require "./notification.php";?>
+    </div>
+    <style>
+        .notification {
+            position: absolute;
+            width: 250px;
+            height: 100%;
+            top: 0;
+            border: solid #dadada 1px;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const notification = document.querySelector(".notification");
+            const nLink = document.getElementById("noti");
 
-
+            nLink.addEventListener("click", () => {
+                if (notification.style.display === 'block') {
+                    notification.style.display = 'none';
+                } else {
+                    notification.style.display = 'block';
+                }
+            });
+        });
+    </script>
