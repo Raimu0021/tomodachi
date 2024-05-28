@@ -64,4 +64,5 @@ $notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
         color: #666;
     }
 </style>
+
 <?php require 'common/footer.php'; ?>

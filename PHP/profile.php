@@ -29,6 +29,7 @@ if (!$profile) {
         <a href="profile_edit.php">プロフィールを編集</a>
     </div>
 </div>
+
 <style>
     body {
         margin: 0;
@@ -71,4 +72,5 @@ if (!$profile) {
         border-radius: 5px;
     }
 </style>
+
 <?php require 'common/footer.php'; ?>
