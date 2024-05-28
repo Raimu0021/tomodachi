@@ -19,19 +19,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($member && password_verify($password, $member['pass'])) {
             $_SESSION['id'] = $member['id'];
             $_SESSION['name'] = $member['name'];
-            $msg = 'ログインしました。';
-            $link = '<a href="home.php">ホーム</a>';
+            $_SESSION['msg'] = 'ログインしました。';
+            header('Location: home.php');
+            exit;
         } else {
-            $msg = 'メールアドレスもしくはパスワードが間違っています。';
-            $link = '<a href="login.php">戻る</a>';
+            $_SESSION['msg'] = 'メールアドレスもしくはパスワードが間違っています。';
+            header('Location: login.php');
+            exit;
         }
     } catch (PDOException $e) {
-        $msg = 'エラーが発生しました: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
-        $link = '<a href="login.php">戻る</a>';
+        $_SESSION['msg'] = 'エラーが発生しました: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+        header('Location: login.php');
+        exit;
     }
 } else {
-    $msg = '不正なリクエストです。';
-    $link = '<a href="login.php">戻る</a>';
+    if (!isset($_SESSION['msg'])) {
+        $_SESSION['msg'] = '不正なリクエストです。';
+        header('Location: login.php');
+        exit;
+    }
 }
 ?>
 
@@ -45,23 +51,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 <div class="flexbox">
     <div class="content">
-    <?php if (!empty($message)): ?>
-        <h1><?php echo htmlspecialchars($msg, ENT_QUOTES, 'UTF-8'); ?></h1>
-        <?php echo $link; ?>
-    <?php endif; ?>
-        <form action="home.php" method="POST">
-        <img src="../CSS/copuruLogo.jpg" alt="ロゴ" class="logo">
+        <?php if (isset($_SESSION['msg'])): ?>
+            <h1><?php echo htmlspecialchars($_SESSION['msg'], ENT_QUOTES, 'UTF-8'); ?></h1>
+            <?php unset($_SESSION['msg']); ?>
+        <?php endif; ?>
+        <form action="login.php" method="POST">
+            <img src="../CSS/copuruLogo.jpg" alt="ロゴ" class="logo">
             <p>あなたの出会いをサポートします</p>
             <br>
             <p>メールアドレス<br>
-                <input type="text" name="email" required></p>
+                <input type="email" name="email" required></p>
             <p>パスワード<br>
                 <input type="password" name="pass" required></p><br>
             <button type="submit" class="btn">ログイン</button>
         </form>
-    </div><br>
+        <br>
         <p class="box">今すぐ出会いが欲しいですか？
-        <a href="signup.php"><button class="btn">新規登録</button></a></p>
+            <a href="signup.php"><button class="btn">新規登録</button></a>
+        </p>
+    </div>
 </div>
 </body>
 </html>
