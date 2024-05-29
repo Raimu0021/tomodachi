@@ -49,12 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 <div class="flexbox">
     <div class="content">
+
         <?php if (isset($_SESSION['msg'])): ?>
             <h1><?php echo htmlspecialchars($_SESSION['msg'], ENT_QUOTES, 'UTF-8'); ?></h1>
             <?php unset($_SESSION['msg']); ?>
         <?php endif; ?>
         <form action="login.php" method="POST">
             <img src="../CSS/copuruLogo.jpg" alt="ロゴ" class="logo">
+
             <p>あなたの出会いをサポートします</p>
             <br>
             <p>メールアドレス<br>
