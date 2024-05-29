@@ -78,6 +78,7 @@ $profile = $stmt->fetch(PDO::FETCH_ASSOC);
         <a href="profile.php">戻る</a>
     </div>
 </div>
+
 <style>
     body {
         margin: 0;
@@ -144,4 +145,5 @@ $profile = $stmt->fetch(PDO::FETCH_ASSOC);
         border-radius: 5px;
     }
 </style>
+
 <?php require 'common/footer.php'; ?>
