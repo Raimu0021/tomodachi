@@ -1,6 +1,6 @@
 <?php
-require 'db-connect.php';
 require 'common/header.php';
+require 'common/db-connect.php'; // includeではなくrequireに変更
 
 // ユーザーIDはセッションやクッキーから取得することを想定（例：1）
 $user_id = 1;
