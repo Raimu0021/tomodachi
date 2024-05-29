@@ -34,9 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 } else {
     if (!isset($_SESSION['msg'])) {
-        $_SESSION['msg'] = '不正なリクエストです。';
-        header('Location: login.php');
-        exit;
+        $_SESSION['msg'] = '';
     }
 }
 ?>
@@ -65,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="password" name="pass" required></p><br>
             <button type="submit" class="btn">ログイン</button>
         </form>
-        <br>
+        </div><br>
         <p class="box">今すぐ出会いが欲しいですか？
             <a href="signup.php"><button class="btn">新規登録</button></a>
         </p>
