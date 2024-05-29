@@ -10,14 +10,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn = new PDO($connect, USER, PASS);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $findUser = $pdo->query("select * from users where email ="$_POST['email']);
-        if(!$findUser){
+        $sql = "SELECT * FROM users WHERE email = :email";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
             $_SESSION['msg'] = '入力されたメールアドレスのユーザーは存在しません';
+            header('Location: login.php');
             exit;
         }
-        if ($password == $findUser["password"]) {
-            $_SESSION['id'] = $findUser['user_id'];
-            $_SESSION['name'] = $findUser['user_name'];
+
+        // ハッシュ化したパスワードを判定する時
+        //if (password_verify($password, $user['password']))
+        //↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+        if ($password === $user['password']) {
+            $_SESSION['id'] = $user['user_id'];
+            $_SESSION['name'] = $user['user_name'];
             $_SESSION['msg'] = 'ログインしました。';
             header('Location: home.php');
             exit;
