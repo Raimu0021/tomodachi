@@ -2,8 +2,45 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// セッションを開始
+session_start();
+
 require 'common/header.php';
 include 'common/db-connect.php';
+
+$message = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $newPassword = $_POST['new-password'];
+    $confirmPassword = $_POST['confirm-password'];
+
+    if ($newPassword !== $confirmPassword) {
+        $message = 'パスワードが一致していません';
+    } else {
+        // パスワードをハッシュ化
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        
+        // ユーザーIDの取得（セッションから取得）
+        if (isset($_SESSION['user_id'])) {
+            $userId = $_SESSION['user_id'];
+
+            // データベースの更新
+            $stmt = $pdo->prepare("UPDATE users SET password = :password WHERE id = :id");
+            $stmt->bindParam(':password', $hashedPassword);
+            $stmt->bindParam(':id', $userId);
+
+            if ($stmt->execute()) {
+                // パスワード変更成功時にlogin.phpにリダイレクト
+                header('Location: login.php');
+                exit;
+            } else {
+                $message = 'パスワードの変更中にエラーが発生しました';
+            }
+        } else {
+            $message = 'ユーザーIDが取得できませんでした。再度ログインしてください。';
+        }
+    }
+}
 ?>
     <style>
         body {
@@ -43,7 +80,8 @@ include 'common/db-connect.php';
         }
 
         input[type="text"],
-        input[type="email"] {
+        input[type="email"],
+        input[type="password"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -71,7 +109,7 @@ include 'common/db-connect.php';
     </style>
 
     <div class="container">
-        <h1>メールアドレス変更</h1>
+        <h1>パスワード変更</h1>
         <?php if (!empty($message)): ?>
             <div class="message"><?php echo htmlspecialchars($message); ?></div>
         <?php endif; ?>
