@@ -15,7 +15,7 @@ if (!$profile) {
     exit;
 }
 ?>
-
+//abs
 <div class="container">
     <div class="profile">
         <img id="profileImage" src="<?= htmlspecialchars($profile['profile_image']) ?>" alt="プロフィール画像">
