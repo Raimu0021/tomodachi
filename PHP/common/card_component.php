@@ -1,9 +1,9 @@
 <?php
 // card_component.php
-function renderCard($image, $name, $age, $gender, $school) {
+function renderCard($profile_image, $user_name, $date_of_birth, $gender, $school_id) {
     //性別を日本語に変換
     $gender = convertGenderToJapanese($gender);
-    
+    $age = calculateAge($date_of_birth);
 
     /* 
     いいねボタンの処理
@@ -16,7 +16,7 @@ function renderCard($image, $name, $age, $gender, $school) {
     */
     echo "
     <div class='card'>
-        <img src='$image' alt='$name'>
+        <img src='$profile_image' alt='$user_name'>
         <div class='card-body'>
             <h2>$name</h2>
             <p>$age 歳/$gender</p>
@@ -28,7 +28,12 @@ function renderCard($image, $name, $age, $gender, $school) {
     </div>";
 }
 
-// function
+function calculateAge($date_of_birth){
+    $dob = new DateTime($date_of_birth);
+    $now = new DateTime();
+    $diff = $now->diff($dob);
+    return $diff->y;
+}
 
 function convertGenderToJapanese($gender){
     
