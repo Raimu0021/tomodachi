@@ -13,20 +13,21 @@
     <div class="row">
         <?php
         $school_id = 1; // 例: 表示したい学校のID
-        $sql = "SELECT image, name, age, gender, school FROM students WHERE school_id = $school_id ORDER BY RAND() LIMIT 8";
-        $result = $conn->query($sql);
+        // $sql = "SELECT profile_image, user_name, age, gender, school FROM users WHERE school_id = $school_id ORDER BY RAND() LIMIT 8";
+        // $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
+        // if ($result->num_rows > 0) {
+        //     while($row = $result->fetch_assoc()) {
                 echo '<div class="col-md-3 mb-4">';
-                renderCard($row['image'], $row['name'], $row['age'], $row['gender'], $row['school']);
+                echo ' test';
+                // renderCard($row['image'], $row['name'], $row['age'], $row['gender'], $row['school']);
                 echo '</div>';
-            }
-        } else {
-            echo "<p>No results found</p>";
-        }
+        //     }
+        // } else {
+        //     echo "<p>No results found</p>";
+        // }
 
-        $conn->close();
+        // $conn = null;
         ?>
     </div>
 </div>

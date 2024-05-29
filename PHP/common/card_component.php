@@ -28,6 +28,8 @@ function renderCard($image, $name, $age, $gender, $school) {
     </div>";
 }
 
+// function
+
 function convertGenderToJapanese($gender){
     
     if($gender == 'Male'){
