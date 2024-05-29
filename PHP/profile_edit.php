@@ -1,6 +1,6 @@
 <?php
-require 'db-connect.php';
-require 'common/header.php';
+require __DIR__ . '/db-connect.php'; // ファイルパスを修正
+require __DIR__ . '/common/header.php'; // ファイルパスを修正
 
 // ユーザーIDはセッションやクッキーから取得することを想定（例：1）
 $user_id = 1;
@@ -146,4 +146,4 @@ $profile = $stmt->fetch(PDO::FETCH_ASSOC);
     }
 </style>
 
-<?php require 'common/footer.php'; ?>
+<?php require __DIR__ . '/common/footer.php'; ?>
