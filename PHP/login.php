@@ -16,9 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute();
         $member = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        if ($member && password_verify($password, $member['pass'])) {
-            $_SESSION['id'] = $member['id'];
-            $_SESSION['name'] = $member['name'];
+        if ($member && password_verify($password, $member['password'])) {
+            $_SESSION['id'] = $member['user_id'];
+            $_SESSION['name'] = $member['user_name'];
             $msg = 'ログインしました。';
             $link = '<a href="home.php">ホーム</a>';
         } else {
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h1><?php echo htmlspecialchars($msg, ENT_QUOTES, 'UTF-8'); ?></h1>
         <?php echo $link; ?>
     <?php endif; ?>
-        <form action="home.php" method="POST">
+        <form action="" method="POST">
         <img src="../CSS/copuruLogo.jpg" alt="ロゴ" class="logo">
             <p>あなたの出会いをサポートします</p>
             <br>
