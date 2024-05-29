@@ -9,16 +9,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         $conn = new PDO($connect, USER, PASS);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
-        $sql = "SELECT * FROM users WHERE email = :email";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':email', $email);
-        $stmt->execute();
-        $member = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($member && password_verify($password, $member['password'])) {
-            $_SESSION['id'] = $member['user_id'];
-            $_SESSION['name'] = $member['user_name'];
+
+        $findUser = $pdo->query("select * from users where email ="$_POST['email']);
+        if(!$findUser){
+            $_SESSION['msg'] = '入力されたメールアドレスのユーザーは存在しません';
+            exit;
+        }
+        if ($password == $findUser["password"]) {
+            $_SESSION['id'] = $findUser['user_id'];
+            $_SESSION['name'] = $findUser['user_name'];
             $_SESSION['msg'] = 'ログインしました。';
             header('Location: home.php');
             exit;
