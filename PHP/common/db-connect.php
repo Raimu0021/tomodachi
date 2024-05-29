@@ -13,6 +13,8 @@ try {
 } catch(PDOException $e) {
     // If connection failed, try to connect to localhost
     $servername = "localhost";
+    $username = 'root';
+    $password = 'root';
     $dsn = 'mysql:host='. $servername .";dbname=".  $dbname .';charset=utf8';
     
     try {
