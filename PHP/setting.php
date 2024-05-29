@@ -6,7 +6,6 @@
     <title>設定ページ</title>
     <link rel="stylesheet" href="../CSS/setting.css">
 </head>
-// kk
 <body>
     <div class="container">
         <form action="mailaddress.php" method="get">
