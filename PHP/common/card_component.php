@@ -1,9 +1,10 @@
 <?php
-// card_component.php
+// db-connect.phpと一緒に読み込むように　（学校名が表示されません）
 function renderCard($profile_image, $user_name, $date_of_birth, $gender, $school_id) {
     //性別を日本語に変換
-    $gender = convertGenderToJapanese($gender);
     $age = calculateAge($date_of_birth);
+    $gender = convertGenderToJapanese($gender);
+    $school = getSchoolName($school_id);
 
     /* 
     いいねボタンの処理
@@ -18,7 +19,7 @@ function renderCard($profile_image, $user_name, $date_of_birth, $gender, $school
     <div class='card'>
         <img src='$profile_image' alt='$user_name'>
         <div class='card-body'>
-            <h2>$name</h2>
+            <h2>$user_name</h2>
             <p>$age 歳/$gender</p>
             
             <p>$school</p>
@@ -47,4 +48,23 @@ function convertGenderToJapanese($gender){
     
     return $gender;
 }
+
+
+function getSchoolName($school_id){
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT school_name FROM schools WHERE school_id = :school_id");
+    $stmt->bindParam(':school_id', $school_id);
+
+    $stmt->execute();
+
+    if ($stmt->rowCount() > 0) {
+        // Fetch the result
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['school_name'];
+    } else {
+        return "学校名不明";
+    }
+}
 ?>
+
