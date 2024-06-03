@@ -7,6 +7,13 @@ session_start();
 require 'common/header.php';
 include 'common/db-connect.php';
 
+try {
+    $conn = new PDO($connect, USER, PASS);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
+}
+
 $message = '';
 $current_email = '';
 
@@ -14,20 +21,19 @@ if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
     
     // 現在のメールアドレスを取得
-    $sql = "SELECT mail FROM users WHERE id = ?";
+    $sql = "SELECT email FROM users WHERE user_id = :id";  // ここで 'user_id' を使用しています
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $current_email = $row['mail'];
+    if ($result) {
+        $current_email = $result['email'];
     } else {
         $message = "ユーザーが見つかりません。";
     }
 
-    $stmt->close();
+    $stmt->closeCursor();
 } else {
     $message = "セッションが見つかりません。再度ログインしてください。";
 }
@@ -38,9 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if ($new_email === $confirm_email) {
         // 新しいメールアドレスを更新
-        $sql = "UPDATE users SET mail = ? WHERE id = ?";
+        $sql = "UPDATE users SET email = :new_email WHERE user_id = :id";  // ここで 'user_id' を使用しています
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("si", $new_email, $id);
+        $stmt->bindParam(':new_email', $new_email, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         
         if ($stmt->execute()) {
             $message = "メールアドレスが更新されました。";
@@ -49,13 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "メールアドレスの更新に失敗しました。";
         }
         
-        $stmt->close();
+        $stmt->closeCursor();
     } else {
         $message = "新しいメールアドレスが一致しません。";
     }
 }
 
-$conn->close();
+$conn = null;
 ?>
 
 <style>
@@ -131,7 +138,7 @@ $conn->close();
     <form action="" method="POST">
         <div class="form-group">
             <label for="current-email">現在のメールアドレス</label>
-            <input type="text" id="current-email" name="current-email" value="<?php echo htmlspecialchars($current_email); ?>" readonly>
+            <input type="text" id="current-email" name="current-email" value="<?php echo htmlspecialchars($current_email ?? '', ENT_QUOTES, 'UTF-8'); ?>" readonly>
         </div>
         <div class="form-group">
             <label for="new-email">新しいメールアドレス</label>
