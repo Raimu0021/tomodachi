@@ -11,16 +11,17 @@
 
 <div class="container">
     <div class="row">
-        <?php
+    <?php
         $school_id = 1; // 例: 表示したい学校のID
-        $sql = "SELECT profile_image, user_name, age, gender, school FROM users WHERE school_id = $school_id ORDER BY RAND() LIMIT 8";
-        $result = $conn->query($sql);
+        $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE school_id = :school_id ORDER BY RAND() LIMIT 8";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
+        $stmt->execute();
 
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
+        if ($stmt->rowCount() > 0) {
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 echo '<div class="col-md-3 mb-4">';
-                echo ' test';
-                renderCard($row['image'], $row['name'], $row['age'], $row['gender'], $row['school']);
+                renderCard($row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id']);
                 echo '</div>';
             }
         } else {
