@@ -1,6 +1,10 @@
-<?php require './common/header.php' ?>
-<?php require './common/card_component.php' ?>
-<?php require './common/db-connect.php'; ?>
+<?php
+session_start();
+require './common/header.php';
+require './common/card_component.php';
+require './common/db-connect.php'; 
+$loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+?>
 
 <form action="search.php" method="get" class="mb-4">
     <div class="input-group">
@@ -12,7 +16,7 @@
 <div class="container">
     <div class="row">
     <?php
-        $school_id = 1; // 例: 表示したい学校のID
+        $school_id = $loggedInUser ? $loggedInUser['school_id'] : null;
         $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE school_id = :school_id ORDER BY RAND() LIMIT 8";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
