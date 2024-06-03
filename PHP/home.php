@@ -22,15 +22,19 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
         $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                echo '<div class="col-md-3 mb-4">';
-                renderCard($row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id']);
-                echo '</div>';
+        // school_idがnullなら同じ学校の生徒は表示しない
+        if($school_id != null){
+            if ($stmt->rowCount() > 0) {
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    echo '<div class="col-md-3 mb-4">';
+                    renderCard($row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id']);
+                    echo '</div>';
+                }
+            } else {
+                echo "<p>同じ学校の生徒は見つかりませんでした</p>";
             }
-        } else {
-            echo "<p>No results found</p>";
         }
+        
 
         $conn = null;
         ?>

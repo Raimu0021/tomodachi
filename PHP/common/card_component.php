@@ -7,13 +7,17 @@ function renderCard($profile_image, $user_name, $date_of_birth, $gender, $school
     $school = getSchoolName($school_id);
 
     /* 
-    いいねボタンの処理
+    - いいねボタンの処理
     ・相手のidと自分のidをlikesデータベースで検索する　見つからなかったら空のハート
     ・ない場合
     クリックされたらlikesデータベースに登録
     ・ある場合
     クリックされたらlikesデータベースから削除
     
+
+    -画像表示処理
+    ・別途でimgファイルを用意する
+    ・imgファイルの中の画像を参照するよう、$profile_imageの内容を変更する必要がある
     */
     echo "
     <div class='card'>
