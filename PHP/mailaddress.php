@@ -1,96 +1,147 @@
 <?php
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+session_start();
 require 'common/header.php';
 include 'common/db-connect.php';
+
+$message = '';
+$current_email = '';
+
+if (isset($_SESSION['id'])) {
+    $id = $_SESSION['id'];
+    
+    // 現在のメールアドレスを取得
+    $sql = "SELECT mail FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $current_email = $row['mail'];
+    } else {
+        $message = "ユーザーが見つかりません。";
+    }
+
+    $stmt->close();
+} else {
+    $message = "セッションが見つかりません。再度ログインしてください。";
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $new_email = $_POST['new-email'];
+    $confirm_email = $_POST['confirm-email'];
+    
+    if ($new_email === $confirm_email) {
+        // 新しいメールアドレスを更新
+        $sql = "UPDATE users SET mail = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("si", $new_email, $id);
+        
+        if ($stmt->execute()) {
+            $message = "メールアドレスが更新されました。";
+            $current_email = $new_email;
+        } else {
+            $message = "メールアドレスの更新に失敗しました。";
+        }
+        
+        $stmt->close();
+    } else {
+        $message = "新しいメールアドレスが一致しません。";
+    }
+}
+
+$conn->close();
 ?>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f8f8f8;
-        }
 
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-        }
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f8f8f8;
+    }
 
-        h1 {
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+    }
 
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
+    h1 {
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
 
-        input[type="text"],
-        input[type="email"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+    input[type="text"],
+    input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
 
-        button:hover {
-            background-color: #45a049;
-        }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
 
-        .message {
-            margin-bottom: 15px;
-            color: #f00;
-        }
-    </style>
+    button:hover {
+        background-color: #45a049;
+    }
 
-    <div class="container">
-        <h1>メールアドレス変更</h1>
-        <?php if (!empty($message)): ?>
-            <div class="message"><?php echo htmlspecialchars($message); ?></div>
-        <?php endif; ?>
-        <form action="" method="POST">
-            <div class="form-group">
-                <label for="current-email">現在のメールアドレス</label>
-                <input type="text" id="current-email" name="current-email" value="<?php echo htmlspecialchars($current_email); ?>" readonly>
-            </div>
-            <div class="form-group">
-                <label for="new-email">新しいメールアドレス</label>
-                <input type="email" id="new-email" name="new-email" required>
-            </div>
-            <div class="form-group">
-                <label for="confirm-email">新しいメールアドレス確認</label>
-                <input type="email" id="confirm-email" name="confirm-email" required>
-            </div>
-            <button type="submit">変更する</button>
-        </form>
-    </div>
+    .message {
+        margin-bottom: 15px;
+        color: #f00;
+    }
+</style>
+
+<div class="container">
+    <h1>メールアドレス変更</h1>
+    <?php if (!empty($message)): ?>
+        <div class="message"><?php echo htmlspecialchars($message); ?></div>
+    <?php endif; ?>
+    <form action="" method="POST">
+        <div class="form-group">
+            <label for="current-email">現在のメールアドレス</label>
+            <input type="text" id="current-email" name="current-email" value="<?php echo htmlspecialchars($current_email); ?>" readonly>
+        </div>
+        <div class="form-group">
+            <label for="new-email">新しいメールアドレス</label>
+            <input type="email" id="new-email" name="new-email" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm-email">新しいメールアドレス確認</label>
+            <input type="email" id="confirm-email" name="confirm-email" required>
+        </div>
+        <button type="submit">変更する</button>
+    </form>
+</div>
 <?php require 'common/footer.php' ?>
-
-
