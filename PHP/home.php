@@ -68,7 +68,20 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         }
     ?>
 
-        
+
+    <?php
+        // ランダムにユーザー16人を表示
+        $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users ORDER BY RAND() LIMIT 16";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        while($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            echo '<div class="col-md-3 mb-4">';
+            renderCard($user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
+            echo '</div>';
+        }
+    ?>
+    
         
     <?php
         $conn = null;
