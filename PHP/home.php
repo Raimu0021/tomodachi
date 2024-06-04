@@ -19,7 +19,7 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
     <div class="row">
     <?php
         $school_id = $loggedInUser ? $loggedInUser['school_id'] : null;
-        $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE school_id = :school_id ORDER BY RAND() LIMIT 8";
+        $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE school_id = :school_id AND is_private = 0 ORDER BY RAND() LIMIT 8";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
         $stmt->execute();
@@ -47,7 +47,7 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         //　いいねしたユーザーを表示
         if($loggedInUser != null) {
 
-            $sql = "SELECT liked_user_id FROM likes WHERE user_id = :user_id LIMIT 8";
+            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id AND is_private = 0";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
             $stmt->execute();
@@ -71,8 +71,9 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
     <?php
         // ランダムにユーザー16人を表示
-        $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users ORDER BY RAND() LIMIT 16";
+        $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE is_private = 0 AND user_id != :user_id ORDER BY RAND() LIMIT 16";
         $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
         $stmt->execute();
 
         while($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
