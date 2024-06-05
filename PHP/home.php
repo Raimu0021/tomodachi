@@ -3,6 +3,7 @@ session_start();
 require './common/header.php';
 require './common/card_component.php';
 require './common/db-connect.php'; 
+require './common/searchSchool.php';
 $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 ?>
 
@@ -12,6 +13,24 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         <button class="btn btn-primary" type="submit">検索</button>
     </div>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('input[name="school_name"]').on('input', function() {
+        var text = $(this).val();
+        $.get('searchSchool.php', {text: text}, function(data) {
+            var schools = JSON.parse(data);
+            var html = '';
+            for(var i = 0; i < schools.length; i++) {
+                html += '<div><a href="search.php?school_id=' + schools[i].school_id + '">' + schools[i].school_name + '</a></div>';
+            }
+            $('#school_predictions').html(html);
+        });
+    });
+});
+</script>
+<div id="school_predictions"></div>
 
 
 
