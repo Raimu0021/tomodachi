@@ -21,7 +21,11 @@ if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
     
     // 現在のメールアドレスを取得
+<<<<<<< HEAD
     $sql = "SELECT email FROM users WHERE user_id = :id";
+=======
+    $sql = "SELECT email FROM users WHERE user_id = :id";  // ここで 'user_id' を使用しています
+>>>>>>> 28637035f5adcfc8dc2e7667d9b10e9bd5f320c6
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -44,7 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if ($new_email === $confirm_email) {
         // 新しいメールアドレスを更新
+<<<<<<< HEAD
         $sql = "UPDATE users SET email = :new_email WHERE user_id = :id";
+=======
+        $sql = "UPDATE users SET email = :new_email WHERE user_id = :id";  // ここで 'user_id' を使用しています
+>>>>>>> 28637035f5adcfc8dc2e7667d9b10e9bd5f320c6
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':new_email', $new_email, PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
