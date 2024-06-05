@@ -1,5 +1,8 @@
 <?php
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> dd50fc8520227432c6d2ee9e21c259eec44d6b7e
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -60,7 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->closeCursor();
     } else {
         $message = "新しいパスワードが一致しません。";
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> dd50fc8520227432c6d2ee9e21c259eec44d6b7e
 include 'common/db-connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -102,14 +108,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $conn = null;
+<<<<<<< HEAD
 >>>>>>> 28637035f5adcfc8dc2e7667d9b10e9bd5f320c6
+=======
+>>>>>>> dd50fc8520227432c6d2ee9e21c259eec44d6b7e
     }
 }
 
 $conn = null;
 ?>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> dd50fc8520227432c6d2ee9e21c259eec44d6b7e
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -193,7 +205,10 @@ $conn = null;
     </form>
 </div>
 <?php require 'common/footer.php' ?>
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> dd50fc8520227432c6d2ee9e21c259eec44d6b7e
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -278,6 +293,10 @@ $conn = null;
         </form>
     </div>
 </body>
+<<<<<<< HEAD
 </html>
 
 >>>>>>> 28637035f5adcfc8dc2e7667d9b10e9bd5f320c6
+=======
+</html>
+>>>>>>> dd50fc8520227432c6d2ee9e21c259eec44d6b7e
