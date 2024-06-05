@@ -21,7 +21,10 @@ if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
     
     // 現在のメールアドレスを取得
-    $sql = "SELECT email FROM users WHERE user_id = :id";
+
+
+    $sql = "SELECT email FROM users WHERE user_id = :id";  // ここで 'user_id' を使用しています
+
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
