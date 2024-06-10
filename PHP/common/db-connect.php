@@ -4,10 +4,10 @@ $dbname = 'LAA1521164-copuru';
 $username = 'LAA1521164';
 $password = 'asojuku';
 
-$dsn = 'mysql:host='. $servername .";dbname=".  $dbname .';charset=utf8';
+$connect = 'mysql:host='. $servername .";dbname=".  $dbname .';charset=utf8';
 
 try {
-    $conn = new PDO($dsn, $username, $password);
+    $conn = new PDO($connect, $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected successfully";
 } catch(PDOException $e) {
@@ -15,10 +15,10 @@ try {
     $servername = "localhost";
     $username = 'root';
     $password = 'root';
-    $dsn = 'mysql:host='. $servername .";dbname=".  $dbname .';charset=utf8';
+    $connect = 'mysql:host='. $servername .";dbname=".  $dbname .';charset=utf8';
     
     try {
-        $conn = new PDO($dsn, $username, $password);
+        $conn = new PDO($connect, $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         echo "Connected to localhost successfully";
     } catch(PDOException $e) {
