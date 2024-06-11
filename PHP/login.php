@@ -7,8 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['pass'];
     
     try {
-        $conn = new PDO($connect, USER, PASS);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $sql = "SELECT * FROM users WHERE email = :email";
         $stmt = $conn->prepare($sql);
