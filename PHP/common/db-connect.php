@@ -9,11 +9,7 @@ $connect = 'mysql:host='. $servername .";dbname=".  $dbname .';charset=utf8';
 try {
     $conn = new PDO($connect, $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    ?>
-
-    <script>console.log("Connected successfully") ;</script>
-    
-    <?php
+    error_log("Connected successfully");
 } catch(PDOException $e) {
     // If connection failed, try to connect to localhost
     $servername = "localhost";
@@ -24,11 +20,7 @@ try {
     try {
         $conn = new PDO($connect, $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        ?>
-
-        <script>console.log("Connected to localhost successfully") ;</script>
-
-    <?php
+        error.log("Connected to localhost successfully");
     } catch(PDOException $e) {
         die("Connection failed: " . $e->getMessage());
     }
