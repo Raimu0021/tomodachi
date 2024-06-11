@@ -21,3 +21,4 @@
     <input type="button" value="デート！">
     <input type="button" value="断る">
 </body>
+</html>
