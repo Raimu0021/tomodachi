@@ -10,7 +10,9 @@ try {
     $conn = new PDO($connect, $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     ?>
+
     <script>console.log("Connected successfully") ;</script>
+    
     <?php
 } catch(PDOException $e) {
     // If connection failed, try to connect to localhost
@@ -23,7 +25,9 @@ try {
         $conn = new PDO($connect, $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         ?>
+
         <script>console.log("Connected to localhost successfully") ;</script>
+
     <?php
     } catch(PDOException $e) {
         die("Connection failed: " . $e->getMessage());
