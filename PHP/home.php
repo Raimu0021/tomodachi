@@ -23,9 +23,11 @@ $(document).ready(function() {
             let schools = JSON.parse(data);
             console.log(schools);//  API返り値
             let html = '';
-            for(let i = 0; i < Object.keys(schools).length; i++) {
-                html += '<div><a href="search.php?school_id=' + schools[i].school_id + '">' + schools[i].school_name + '</a></div>';
-                console.log(schools.school_name);
+            for(var key in schools) {
+                if(schools.hasOwnProperty(key)) {
+                    html += '<div><a href="search.php?school_id=' + schools[key].school_id + '">' + schools[key].school_name + '</a></div>';
+                    console.log(schools[key].school_name);
+                }
             }
             $('#school_predictions').html(html);
         });

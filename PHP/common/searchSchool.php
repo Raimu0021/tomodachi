@@ -8,7 +8,7 @@ $stmt = $conn->prepare($sql);
 $stmt->bindValue(':text', '%' . $searchText . '%', PDO::PARAM_STR);
 $stmt->execute();
 
-$results = $stmt->fetch(PDO::FETCH_ASSOC);
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC); // この行を変更
 
 echo json_encode($results);
 ?>
