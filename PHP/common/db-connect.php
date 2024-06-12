@@ -25,9 +25,7 @@ try {
         $conn = new PDO($connect, $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
- 
-
-        error.log("Connected to localhost successfully");
+        error_log("Connected successfully");
 
     } catch(PDOException $e) {
         die("Connection failed: " . $e->getMessage());
