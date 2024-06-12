@@ -1,8 +1,28 @@
 <?php
-    const SERVER = 'mysql304.phy.lolipop.lan';
-    const DBNAME = 'LAA1521164-copuru';
-    const USER = 'LAA1521164';
-    const PASS = 'asojuku';
+$servername = 'mysql304.phy.lolipop.lan';
+$dbname = 'LAA1521164-copuru';
+$username = 'LAA1521164';
+$password = 'asojuku';
 
-    $connect = 'mysql:host='. SERVER .";dbname=".  DBNAME .';charset=utf8';
+$connect = 'mysql:host='. $servername .";dbname=".  $dbname .';charset=utf8';
+
+try {
+    $conn = new PDO($connect, $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    error_log("Connected successfully");
+} catch(PDOException $e) {
+    // If connection failed, try to connect to localhost
+    $servername = "localhost";
+    $username = 'root';
+    $password = 'root';
+    $connect = 'mysql:host='. $servername .";dbname=".  $dbname .';charset=utf8';
+    
+    try {
+        $conn = new PDO($connect, $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        error.log("Connected to localhost successfully");
+    } catch(PDOException $e) {
+        die("Connection failed: " . $e->getMessage());
+    }
+}
 ?>

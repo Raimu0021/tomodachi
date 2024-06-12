@@ -2,8 +2,19 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../CSS/header.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+        rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" 
+        crossorigin="anonymous"
+    >
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" 
+    crossorigin="anonymous"
+    ></script>
+    
 </head>
 <body>
     <div class="sidebar">
@@ -11,11 +22,11 @@
             <img src="../CSS/copuruLogo.jpg" alt="ロゴ" class="logo">
         </a>
         <ul>
-            <li><a href="./home.php">ホーム</a></li>
-            <li><a href="#" id="noti">通知</a></li>
-            <li><a href="./date.php">デート</a></li>
-            <li><a href="./chat_list.php">メッセージ</a></li>
-            <li><a href="./setting.php">設定</a></li>
+            <li><a href="./home.php"><img src="../CSS/icon_home.png" alt="ホーム">ホーム</a></li>
+            <li><a href="#" id="noti"><img src="../CSS/icon_notification.png" alt="通知">通知</a></li>
+            <li><a href="./date.php"><img src="../CSS/icon_date.png" alt="デート">デート</a></li>
+            <li><a href="./messege.php"><img src="../CSS/icon_message.png" alt="メッセージ">メッセージ</a></li>
+            <li><a href="./setting.php"><img src="../CSS/icon_setting.png" alt="設定">設定</a></li>
             <li id="profile"><a href="./profile">プロフィール</a></li>
         </ul>
         
@@ -30,6 +41,7 @@
             height: 100%;
             top: 0;
             border: solid #dadada 1px;
+            background-color: white;
         }
     </style>
     <script>

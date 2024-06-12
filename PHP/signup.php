@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <h1><?php echo $msg; ?></h1>
             <a href="signup.php">戻る</a>
             <?php endif; ?>
-            <form action="signup.php" method="POST">
+            <form action="login.php" method="POST">
             <img src="../CSS/copuruLogo.jpg" alt="ロゴ" class="logo">
                 <p>あなたの出会いをサポートします</p>
                 <br>
