@@ -7,13 +7,6 @@ session_start();
 require 'common/header.php';
 include 'common/db-connect.php';
 
-try {
-    $conn = new PDO($connect, USER, PASS);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
-
 $message = '';
 $current_email = '';
 
@@ -21,8 +14,6 @@ if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
     
     // 現在のメールアドレスを取得
-
-
     $sql = "SELECT email FROM users WHERE user_id = :id";  // ここで 'user_id' を使用しています
 
     $stmt = $conn->prepare($sql);
