@@ -16,12 +16,24 @@ $stmt->execute();
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+<div class="container">
+    <div class="row">
+
 <h2>検索結果</h2>
 
 <?php
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-    renderCard($row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id']);
+if (count($results) > 0) {
+    foreach ($results as $row) {
+        echo '<div class="col-md-3 mb-4">';
+            renderCard($row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id']);
+        echo '</div>';
+    }
+} else {
+    // 検索結果が0件の場合のメッセージ
+    echo "<p>検索結果に一致する生徒はいませんでした。</p>";
 }
-
 ?>
+
+    </div>
+</div>
 
