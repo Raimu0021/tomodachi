@@ -3,9 +3,8 @@ require 'common/header.php';
 require 'common/db-connect.php';
 
 $user_id = 1;
-$pdo = new PDO($connect, USER, PASS);
 
-$chat_ids = $pdo->prepare('SELECT * FROM participants WHERE user_id=?');
+$chat_ids = $conn->prepare('SELECT * FROM participants WHERE user_id=?');
 $chat_ids->execute([$user_id]);
 
 ?>
@@ -15,11 +14,11 @@ $chat_ids->execute([$user_id]);
     foreach($chat_ids as $id_row){
         $chat_id = $id_row['chat_id'];
 
-        $join_chat = $pdo->prepare('SELECT * FROM chats WHERE chat_id=?');
+        $join_chat = $conn->prepare('SELECT * FROM chats WHERE chat_id=?');
         $join_chat->execute([$chat_id]);
         $chat = $join_chat->fetch(PDO::FETCH_ASSOC);
         
-        $last_message_query = $pdo->prepare('SELECT * FROM messages WHERE chat_id=? ORDER BY message_id DESC LIMIT 1');
+        $last_message_query = $conn->prepare('SELECT * FROM messages WHERE chat_id=? ORDER BY message_id DESC LIMIT 1');
         $last_message_query->execute([$chat_id]);
         $last_message = $last_message_query->fetch(PDO::FETCH_ASSOC);
 

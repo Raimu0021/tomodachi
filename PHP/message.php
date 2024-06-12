@@ -3,7 +3,6 @@ require 'common/header.php';
 require 'common/db-connect.php';
 
 $user_id = 1;
-$pdo = new PDO($connect, USER, PASS);
 $eror_message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
@@ -13,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
     
 
     if (!empty($message)) {
-        $stmt = $pdo->prepare('INSERT INTO messages (chat_id, sender_id, message, message_at) VALUES (?, ?, ?, NOW())');
+        $stmt = $conn->prepare('INSERT INTO messages (chat_id, sender_id, message, message_at) VALUES (?, ?, ?, NOW())');
         $stmt->execute([$chat_id, $sender_id, $message]);
     }else{
         $eror_message = "メッセージを入力してください";
@@ -21,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
 }
 
 $chat_id = $_POST['chat_id'];
-$messages = $pdo->prepare('SELECT * FROM messages WHERE chat_id = ? ORDER BY message_at');
+$messages = $conn->prepare('SELECT * FROM messages WHERE chat_id = ? ORDER BY message_at');
 $messages->execute([$chat_id]);
 ?>
 
@@ -68,7 +67,7 @@ setInterval(fetchMessages, 1000);
     <form action="" method="post">
         <input type="hidden" name="chat_id" value="<?php echo htmlspecialchars($chat_id, ENT_QUOTES, 'UTF-8'); ?>">
         <select name="sender_id">
-            <?php $participant = $pdo->prepare('SELECT * FROM participants WHERE chat_id=?');
+            <?php $participant = $conn->prepare('SELECT * FROM participants WHERE chat_id=?');
             $participant->execute([$chat_id]);
             foreach ($participant as $sender):?>
             <option value="<?php echo $sender['user_id'];?>"><?php echo $sender['user_id'];?></option>
