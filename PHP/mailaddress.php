@@ -7,13 +7,6 @@ session_start();
 require 'common/header.php';
 include 'common/db-connect.php';
 
-try {
-    $conn = new PDO($connect, USER, PASS);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
-
 $message = '';
 $current_email = '';
 
@@ -22,6 +15,7 @@ if (isset($_SESSION['id'])) {
     
     // 現在のメールアドレスを取得
     $sql = "SELECT email FROM users WHERE user_id = :id";  // ここで 'user_id' を使用しています
+
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -44,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if ($new_email === $confirm_email) {
         // 新しいメールアドレスを更新
-        $sql = "UPDATE users SET email = :new_email WHERE user_id = :id";  // ここで 'user_id' を使用しています
+        $sql = "UPDATE users SET email = :new_email WHERE user_id = :id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':new_email', $new_email, PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -89,6 +83,7 @@ $conn = null;
     h1 {
         margin-bottom: 20px;
         font-size: 24px;
+        color: #333;
     }
 
     .form-group {
@@ -100,6 +95,7 @@ $conn = null;
         display: block;
         margin-bottom: 5px;
         font-weight: bold;
+        color: #555;
     }
 
     input[type="text"],
@@ -108,6 +104,7 @@ $conn = null;
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
+        box-sizing: border-box;
     }
 
     button {
@@ -118,6 +115,7 @@ $conn = null;
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
+        width: 100%;
     }
 
     button:hover {
