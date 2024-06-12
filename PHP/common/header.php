@@ -42,6 +42,7 @@
             top: 0;
             border: solid #dadada 1px;
             background-color: white;
+            z-index: 10;
         }
     </style>
     <script>
