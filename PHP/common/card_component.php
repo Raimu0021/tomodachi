@@ -4,7 +4,7 @@ require __DIR__ . '/db-connect.php';
 // db-connect.phpと一緒に読み込むように　（学校名が表示されません）
 function renderCard($profile_image, $user_name, $date_of_birth, $gender, $school_id) {
     //性別を日本語に変換
-    $profile_image = $profile_image ? $profile_image : __DIR__ . '/img/default-avatar.png';
+    $profile_image = $profile_image ? $profile_image :'../img/default-avatar.webp';
     $age = calculateAge($date_of_birth);
     $gender = convertGenderToJapanese($gender);
     $school = getSchoolName($school_id);
