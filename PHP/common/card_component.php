@@ -1,9 +1,8 @@
 <?php
-require __DIR__ . '/db-connect.php';
 
 // db-connect.phpと一緒に読み込むように　（学校名が表示されません）
 function renderCard($profile_image, $user_name, $date_of_birth, $gender, $school_id) {
-    //性別を日本語に変換
+    
     $profile_image = $profile_image ? $profile_image :'../img/default-avatar.webp';
     $age = calculateAge($date_of_birth);
     $gender = convertGenderToJapanese($gender);
@@ -16,22 +15,15 @@ function renderCard($profile_image, $user_name, $date_of_birth, $gender, $school
     クリックされたらlikesデータベースに登録
     ・ある場合
     クリックされたらlikesデータベースから削除
-    
-
-    -画像表示処理
-    ・別途でimgファイルを用意する
-    ・imgファイルの中の画像を参照するよう、$profile_imageの内容を変更する必要がある
     */
     echo "
     <div class='card'>
         <img src='$profile_image' alt='$user_name'>
         <div class='card-body'>
             <h2>$user_name</h2>
-            <p>$age 歳/$gender</p>
-            
-            <p>$school</p>
-            
             <button>Like</button>
+            <p>$age 歳/$gender</p>
+            <p>$school</p>
         </div>
     </div>";
 }
