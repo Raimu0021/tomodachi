@@ -7,13 +7,6 @@ session_start();
 require 'common/header.php';
 include 'common/db-connect.php';
 
-try {
-    $conn = new PDO($connect, USER, PASS);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
-
 $message = '';
 $current_email = '';
 
@@ -21,8 +14,6 @@ if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
     
     // 現在のメールアドレスを取得
-
-
     $sql = "SELECT email FROM users WHERE user_id = :id";  // ここで 'user_id' を使用しています
 
     $stmt = $conn->prepare($sql);
@@ -71,12 +62,21 @@ $conn = null;
 <style>
     body {
         font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #f8f8f8;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        margin: 0;
-        background-color: #f8f8f8;
+        overflow: hidden;
+    }
+
+    .container-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
     }
 
     .container {
@@ -137,25 +137,28 @@ $conn = null;
     }
 </style>
 
-<div class="container">
-    <h1>メールアドレス変更</h1>
-    <?php if (!empty($message)): ?>
-        <div class="message"><?php echo htmlspecialchars($message); ?></div>
-    <?php endif; ?>
-    <form action="" method="POST">
-        <div class="form-group">
-            <label for="current-email">現在のメールアドレス</label>
-            <input type="text" id="current-email" name="current-email" value="<?php echo htmlspecialchars($current_email ?? '', ENT_QUOTES, 'UTF-8'); ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="new-email">新しいメールアドレス</label>
-            <input type="email" id="new-email" name="new-email" required>
-        </div>
-        <div class="form-group">
-            <label for="confirm-email">新しいメールアドレス確認</label>
-            <input type="email" id="confirm-email" name="confirm-email" required>
-        </div>
-        <button type="submit">変更する</button>
-    </form>
+<div class="container-wrapper">
+    <div class="container">
+        <h1>メールアドレス変更</h1>
+        <?php if (!empty($message)): ?>
+            <div class="message"><?php echo htmlspecialchars($message); ?></div>
+        <?php endif; ?>
+        <form action="" method="POST">
+            <div class="form-group">
+                <label for="current-email">現在のメールアドレス</label>
+                <input type="text" id="current-email" name="current-email" value="<?php echo htmlspecialchars($current_email ?? '', ENT_QUOTES, 'UTF-8'); ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="new-email">新しいメールアドレス</label>
+                <input type="email" id="new-email" name="new-email" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-email">新しいメールアドレス確認</label>
+                <input type="email" id="confirm-email" name="confirm-email" required>
+            </div>
+            <button type="submit">変更する</button>
+        </form>
+    </div>
 </div>
+
 <?php require 'common/footer.php' ?>
