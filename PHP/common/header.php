@@ -25,7 +25,7 @@
             <li><a href="./home.php"><img src="../CSS/icon_home.png" alt="ホーム">ホーム</a></li>
             <li><a href="#" id="noti"><img src="../CSS/icon_notification.png" alt="通知">通知</a></li>
             <li><a href="./date.php"><img src="../CSS/icon_date.png" alt="デート">デート</a></li>
-            <li><a href="./messege.php"><img src="../CSS/icon_message.png" alt="メッセージ">メッセージ</a></li>
+            <li><a href="./chat_list.php"><img src="../CSS/icon_message.png" alt="メッセージ">メッセージ</a></li>
             <li><a href="./setting.php"><img src="../CSS/icon_setting.png" alt="設定">設定</a></li>
             <li id="profile"><a href="./profile">プロフィール</a></li>
         </ul>
