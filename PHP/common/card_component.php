@@ -1,7 +1,10 @@
 <?php
+require __DIR__ . '/db-connect.php';
+
 // db-connect.phpと一緒に読み込むように　（学校名が表示されません）
 function renderCard($profile_image, $user_name, $date_of_birth, $gender, $school_id) {
     //性別を日本語に変換
+    $profile_image = $profile_image ? $profile_image : __DIR__ . '/img/default-avatar.png';
     $age = calculateAge($date_of_birth);
     $gender = convertGenderToJapanese($gender);
     $school = getSchoolName($school_id);
@@ -57,17 +60,29 @@ function convertGenderToJapanese($gender){
 function getSchoolName($school_id){
     global $conn;
 
-    $stmt = $conn->prepare("SELECT school_name FROM schools WHERE school_id = :school_id");
-    $stmt->bindParam(':school_id', $school_id);
+    // データベース接続の確認
+    if ($conn === null) {
+        error_log("データベース接続に失敗しました。");
+        return "データベース接続エラー";
+    }
 
-    $stmt->execute();
+    try {
+        $stmt = $conn->prepare("SELECT school_name FROM schools WHERE school_id = :school_id");
+        $stmt->bindParam(':school_id', $school_id);
 
-    if ($stmt->rowCount() > 0) {
-        // Fetch the result
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['school_name'];
-    } else {
-        return "学校名不明";
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            // Fetch the result
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['school_name'];
+        } else {
+            return "学校名不明";
+        }
+    } catch (PDOException $e) {
+        // エラーハンドリングの強化
+        error_log("データベースクエリエラー: " . $e->getMessage());
+        return "クエリエラー";
     }
 }
 ?>
