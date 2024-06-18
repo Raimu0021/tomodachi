@@ -44,20 +44,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<?php require 'common/header.php'?>
-<link rel="stylesheet" href="../CSS/login.css">
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン</title>
+    <link rel="stylesheet" href="../CSS/login.css">
+</head>
+<body>
 <div class="flexbox">
     <div class="content">
         <?php foreach ($errors as $error): ?>
             <p style="color: red;"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
         <?php endforeach; ?>
-        <form action="" method="POST">
-            <img src="../CSS/copuruLogo.jpg" alt="ロゴ" class="logo">
+        <div class="logo">
+            <img src="../CSS/copuruLogo.jpg" alt="ロゴ">   
             <h1>coプル</h1>
-            <p>あなたの出会いをサポートします</p>
-            <h3>ログイン<h3>
-            <p>メールアドレス<input type="email" name="email" required></p>
-            <p>パスワード<input type="password" name="pass" required></p><br>
+        </div>
+        <p>あなたの出会いをサポートします</p>
+        <h3>ログイン</h3>
+        <form action="" method="POST">
+            <p>メールアドレス</p><input type="email" name="email">
+            <p>パスワード</p><input type="password" name="pass">
             <button type="submit" class="btn">ログイン</button>
         </form>
     </div>
@@ -65,9 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <a href="signup.php"><button class="btn">新規登録</button></a>
     </p>
 </div>
-<style>
-    .sidebar {
-        display: none;
-    }
-</style>
-<?php require 'common/footer.php'?>
+</body>
+</html>
+
+
