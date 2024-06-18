@@ -67,12 +67,21 @@ $conn = null;
 <style>
     body {
         font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #f8f8f8;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        margin: 0;
-        background-color: #f8f8f8;
+        overflow: hidden;
+    }
+
+    .container-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
     }
 
     .container {
@@ -133,25 +142,28 @@ $conn = null;
     }
 </style>
 
-<div class="container">
-    <h1>パスワード変更</h1>
-    <?php if (!empty($message)): ?>
-        <div class="message"><?php echo htmlspecialchars($message); ?></div>
-    <?php endif; ?>
-    <form action="" method="POST">
-        <div class="form-group">
-            <label for="current-password">現在のパスワード</label>
-            <input type="password" id="current-password" name="current-password" required>
-        </div>
-        <div class="form-group">
-            <label for="new-password">新しいパスワード</label>
-            <input type="password" id="new-password" name="new-password" required>
-        </div>
-        <div class="form-group">
-            <label for="confirm-password">新しいパスワード確認</label>
-            <input type="password" id="confirm-password" name="confirm-password" required>
-        </div>
-        <button type="submit">変更する</button>
-    </form>
+<div class="container-wrapper">
+    <div class="container">
+        <h1>パスワード変更</h1>
+        <?php if (!empty($message)): ?>
+            <div class="message"><?php echo htmlspecialchars($message); ?></div>
+        <?php endif; ?>
+        <form action="" method="POST">
+            <div class="form-group">
+                <label for="current-password">現在のパスワード</label>
+                <input type="password" id="current-password" name="current-password" required>
+            </div>
+            <div class="form-group">
+                <label for="new-password">新しいパスワード</label>
+                <input type="password" id="new-password" name="new-password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">新しいパスワード確認</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            <button type="submit">変更する</button>
+        </form>
+    </div>
 </div>
+
 <?php require 'common/footer.php' ?>
