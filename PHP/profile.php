@@ -6,9 +6,9 @@ require 'common/db-connect.php'; // includeではなくrequireに変更
 $user_id = 1;
 
 // プロフィール情報を取得
-$stmt = $pdo->prepare("SELECT * FROM profiles WHERE user_id = :user_id");
+$stmt = $conn->prepare("SELECT * FROM users WHERE user_id = :user_id");
 $stmt->execute(['user_id' => $user_id]);
-$profile = $stmt->fetch(PDO::FETCH_ASSOC);
+$profile= $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$profile) {
     echo "プロフィール情報が見つかりませんでした。";
@@ -19,11 +19,11 @@ if (!$profile) {
 <div class="container">
     <div class="profile">
         <img id="profileImage" src="<?= htmlspecialchars($profile['profile_image']) ?>" alt="プロフィール画像">
-        <p>名前: <span id="profileName"><?= htmlspecialchars($profile['name']) ?></span></p>
-        <p>年齢/性別: <span id="profileAgeGender"><?= htmlspecialchars($profile['age_gender']) ?></span></p>
-        <p>学校: <span id="profileSchool"><?= htmlspecialchars($profile['school']) ?></span></p>
+        <p>名前: <span id="profileName"><?= htmlspecialchars($profile['user_name']) ?></span></p>
+        <p>年齢/性別: <span id="profileAgeGender"><?= htmlspecialchars($profile['gender']) ?></span></p>
+        <p>学校: <span id="profileSchool"><?= htmlspecialchars($profile['school_id']) ?></span></p>
         <p>学年: <span id="profileGrade"><?= htmlspecialchars($profile['grade']) ?></span></p>
-        <p>自己紹介: <span id="profileBio"><?= htmlspecialchars($profile['bio']) ?></span></p>
+        <p>自己紹介: <span id="profileBio"><?= htmlspecialchars($profile['self_introduction']) ?></span></p>
     </div>
     <div class="edit-profile">
         <a href="profile_edit.php">プロフィールを編集</a>
