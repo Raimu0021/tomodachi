@@ -7,6 +7,8 @@ require './common/searchSchool.php';
 $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 ?>
 
+<!-- 検索欄 -->
+
 <form action="search.php" method="get" class="mb-4">
     <div class="input-group">
         <input type="text" name="school_name" id="school_name" class="form-control" placeholder="学校名を入力">
@@ -49,7 +51,9 @@ $(document).ready(function() {
 <div id="school_predictions">
 </div>
 
+<!-- 検索欄ここまで-->
 
+<!-- ユーザー表示 -->
 
 <div class="container">
     <div class="row">
@@ -78,9 +82,11 @@ $(document).ready(function() {
         }
     ?>
 
+<!-- ユーザー表示ここまで -->
+
+<!-- いいねユーザー表示 -->
         
     <?php
-        //　いいねしたユーザーを表示
         if($loggedInUser != null) {
 
             $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id AND is_private = 0";
@@ -104,9 +110,10 @@ $(document).ready(function() {
         }
     ?>
 
+<!-- いいねユーザー表示ここまで -->
 
+<!-- ランダムユーザー表示 -->
     <?php
-        // ランダムにユーザー16人を表示
         if($loggedInUser != null){
             $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE is_private = 0 AND user_id != :user_id ORDER BY RAND() LIMIT 16";
             $stmt = $conn->prepare($sql);
@@ -126,7 +133,7 @@ $(document).ready(function() {
             echo '</div>';
         }
     ?>
-    
+<!-- ランダムユーザー表示ここまで -->
         
     <?php
         $conn = null;
