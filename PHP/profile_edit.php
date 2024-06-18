@@ -1,5 +1,5 @@
 <?php
-require 'db-connect.php';
+require 'common/db-connect.php';
 require 'common/header.php';
 
 // ユーザーIDはセッションやクッキーから取得することを想定（例：1）
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // プロフィール情報を更新または挿入
-    $stmt = $pdo->prepare("INSERT INTO profiles (user_id, name, age_gender, school, grade, bio, profile_image) 
+    $stmt = $conn->prepare("INSERT INTO profiles (user_id, name, age_gender, school, grade, bio, profile_image) 
                            VALUES (:user_id, :name, :age_gender, :school, :grade, :bio, :profile_image)
                            ON DUPLICATE KEY UPDATE 
                            name = VALUES(name), age_gender = VALUES(age_gender), school = VALUES(school),
@@ -39,9 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // 現在のプロフィール情報を取得
-$stmt = $pdo->prepare("SELECT * FROM profiles WHERE user_id = :user_id");
+$stmt = $conn->prepare("SELECT * FROM users WHERE user_id = :user_id");
 $stmt->execute(['user_id' => $user_id]);
 $profile = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Null値をデフォルト値に置き換え
+$profile_name = htmlspecialchars($profile['name'] ?? '');
+$profile_age_gender = htmlspecialchars($profile['age_gender'] ?? '');
+$profile_school = htmlspecialchars($profile['school'] ?? '');
+$profile_grade = htmlspecialchars($profile['grade'] ?? '');
+$profile_bio = htmlspecialchars($profile['bio'] ?? '');
 ?>
 
 <div class="container">
@@ -52,23 +59,23 @@ $profile = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
         <div class="form-group">
             <label for="name">名前</label>
-            <input type="text" id="name" name="name" value="<?= htmlspecialchars($profile['name']) ?>">
+            <input type="text" id="name" name="name" value="<?= $profile_name ?>">
         </div>
         <div class="form-group">
             <label for="age_gender">年齢/性別</label>
-            <input type="text" id="age_gender" name="age_gender" value="<?= htmlspecialchars($profile['age_gender']) ?>">
+            <input type="text" id="age_gender" name="age_gender" value="<?= $profile_age_gender ?>">
         </div>
         <div class="form-group">
             <label for="school">学校</label>
-            <input type="text" id="school" name="school" value="<?= htmlspecialchars($profile['school']) ?>">
+            <input type="text" id="school" name="school" value="<?= $profile_school ?>">
         </div>
         <div class="form-group">
             <label for="grade">学年</label>
-            <input type="text" id="grade" name="grade" value="<?= htmlspecialchars($profile['grade']) ?>">
+            <input type="text" id="grade" name="grade" value="<?= $profile_grade ?>">
         </div>
         <div class="form-group">
             <label for="bio">自己紹介</label>
-            <textarea id="bio" name="bio"><?= htmlspecialchars($profile['bio']) ?></textarea>
+            <textarea id="bio" name="bio"><?= $profile_bio ?></textarea>
         </div>
         <div class="form-group">
             <button type="submit">保存</button>
