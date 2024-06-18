@@ -46,26 +46,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-<?php require 'common/header.php'?>
-<link rel="stylesheet" href="../CSS/signup.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規登録</title>
+</head>
+<body>
+<link rel="stylesheet" href="../CSS/login.css">
 <div class="flexbox">
     <div class="content">
         <?php foreach ($errors as $error): ?>
             <p style="color: red;"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
         <?php endforeach; ?>
-        <form action="" method="POST">
+        <div class="logo">
             <img src="../CSS/copuruLogo.jpg" alt="ロゴ" class="logo">
-            <p>あなたの出会いをサポートします</p>
-            <br>
-            <p>メールアドレス<br>
-                <input type="email" name="email" required></p>
-            <p>パスワード<br>
-                <input type="password" name="pass" required></p><br>
+            <h1>coプル</h1>
+        </div>
+        <p>あなたの出会いをサポートします</p>
+        <h3>新規登録</h3>
+        <form action="" method="POST">    
+            <p>メールアドレス</p>
+            <input type="email" name="email">
+            <p>パスワード</p>
+            <input type="password" name="pass">
             <button type="submit" class="btn">新規登録</button>
         </form>
-    </div><br>
+    </div>
     <p class="box">登録済みですか？
         <a href="login.php"><button class="btn">ログイン</button></a>
     </p>
 </div>
-<?php require 'common/footer.php'?>
+</body>
+</html>
