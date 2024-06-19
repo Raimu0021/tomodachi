@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
 
     if (!empty($message)) {
         $stmt = $conn->prepare('INSERT INTO messages (chat_id, sender_id, message, message_at) VALUES (?, ?, ?, NOW())');
+
         if ($stmt->execute([$chat_id, $sender_id, $message])) {
             // メッセージが正常に挿入された場合の処理
         } else {
@@ -23,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
 }
 
 $chat_id = $_POST['chat_id'] ?? ''; // POSTが存在しない場合のデフォルト値
+
 $messages = $conn->prepare('SELECT * FROM messages WHERE chat_id = ? ORDER BY message_at');
 $messages->execute([$chat_id]);
 ?>

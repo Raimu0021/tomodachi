@@ -2,81 +2,81 @@
 session_start();
 include 'common/db-connect.php';
 
+$errors = []; // エラーメッセージを格納する配列
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['pass'];
-    
-    try {
 
-        $sql = "SELECT * FROM users WHERE email = :email";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$user) {
-            $_SESSION['msg'] = '入力されたメールアドレスのユーザーは存在しません';
-            header('Location: login.php');
-            exit;
-        }
-
-        // ハッシュ化したパスワードを判定する時
-        //if (password_verify($password, $user['password']))
-        //↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-        if ($password === $user['password']) {
-            $_SESSION['id'] = $user['user_id'];
-            $_SESSION['name'] = $user['user_name'];
-            $_SESSION['msg'] = 'ログインしました。';
-            header('Location: home.php');
-            exit;
-        } else {
-            $_SESSION['msg'] = 'メールアドレスもしくはパスワードが間違っています。';
-            header('Location: login.php');
-            exit;
-        }
-    } catch (PDOException $e) {
-        $_SESSION['msg'] = 'エラーが発生しました: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
-        header('Location: login.php');
-        exit;
+    // メールアドレスのバリデーション
+    if (empty($email)) {
+        $errors['email'] = 'メールアドレスは必須です。';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = '無効なメールアドレス形式です。';
     }
-} else {
-    if (!isset($_SESSION['msg'])) {
-        $_SESSION['msg'] = '';
+
+    // パスワードのバリデーション
+    if (empty($password)) {
+        $errors['pass'] = 'パスワードは必須です。';
+    }
+
+    if (count($errors) === 0) {
+        try {
+            $sql = "SELECT * FROM users WHERE email = :email";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$user) {
+                $errors['login'] = '入力されたメールアドレスのユーザーは存在しません';
+            } elseif (!password_verify($password, $user['password'])) {
+                $errors['login'] = 'メールアドレスもしくはパスワードが間違っています。';
+            } else {
+                $_SESSION['id'] = $user['user_id'];
+                header('Location: home.php');
+                exit;
+            }
+        } catch (PDOException $e) {
+            $errors['db'] = 'エラーが発生しました: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+        }
     }
 }
 ?>
 
+
+
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ログイン</title>
     <link rel="stylesheet" href="../CSS/login.css">
 </head>
 <body>
 <div class="flexbox">
     <div class="content">
-
-        <?php if (isset($_SESSION['msg'])): ?>
-            <h1><?php echo htmlspecialchars($_SESSION['msg'], ENT_QUOTES, 'UTF-8'); ?></h1>
-            <?php unset($_SESSION['msg']); ?>
-        <?php endif; ?>
+        <?php foreach ($errors as $error): ?>
+            <p style="color: red;"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php endforeach; ?>
+        <div class="logo">
+            <img src="../CSS/copuruLogo.jpg" alt="ロゴ">   
+            <h1>coプル</h1>
+        </div>
+        <p>あなたの出会いをサポートします</p>
+        <h3>ログイン</h3>
         <form action="" method="POST">
-            <img src="../CSS/copuruLogo.jpg" alt="ロゴ" class="logo">
-
-            <p>あなたの出会いをサポートします</p>
-            <br>
-            <p>メールアドレス<br>
-                <input type="email" name="email" required></p>
-            <p>パスワード<br>
-                <input type="password" name="pass" required></p><br>
+            <p>メールアドレス</p><input type="email" name="email">
+            <p>パスワード</p><input type="password" name="pass">
             <button type="submit" class="btn">ログイン</button>
         </form>
-        </div><br>
-        <p class="box">今すぐ出会いが欲しいですか？
-            <a href="signup.php"><button class="btn">新規登録</button></a>
-        </p>
     </div>
+    <p class="box">今すぐ出会いが欲しいですか？
+        <a href="signup.php"><button class="btn">新規登録</button></a>
+    </p>
 </div>
 </body>
 </html>
+
+
