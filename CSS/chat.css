@@ -1,6 +1,24 @@
 .contents {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
+
+.chats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.chats button {
+  width: 70%;
+  background-color: white;
+  border: 1px solid #94c0cf;
+  border-radius: 4px;
+}
+
 .messages {
   display: flex;
   flex-direction: column;
@@ -8,6 +26,8 @@
   justify-content: center;
   border: 1.5px solid #8e8e8e;
   width: 60%;
+  height: 600px;
+  overflow-y: scroll;
 }
 
 .message_text {
