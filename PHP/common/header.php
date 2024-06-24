@@ -27,7 +27,7 @@
             <li><a href="./date.php"><img src="../CSS/icon_date.png" alt="デート">デート</a></li>
             <li><a href="./chat_list.php"><img src="../CSS/icon_message.png" alt="メッセージ">メッセージ</a></li>
             <li><a href="./setting.php"><img src="../CSS/icon_setting.png" alt="設定">設定</a></li>
-            <li id="profile"><a href="./profile">プロフィール</a></li>
+            <li id="profile"><div class="imgCyrcle"><img src="../imgs/sakura.jpg" alt=""></div><a href="./profile">プロフィール</a></li>
         </ul>
         
     </div>

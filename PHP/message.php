@@ -1,8 +1,9 @@
 <?php
+session_start();
 require 'common/header.php';
 require 'common/db-connect.php';
 
-$user_id = 1;
+$user_id = $_SESSION['id'];
 $error_message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
