@@ -66,9 +66,10 @@ $(document).ready(function() {
     <div class="row">
     <?php
         // $school_id = $loggedInUser ? $loggedInUser['school_id'] : null;
-        $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE school_id = :school_id AND is_private = 0 ORDER BY RAND() LIMIT 8";
+        $sql = "SELECT * FROM users WHERE school_id = :school_id AND user_id != :user_id AND is_private = 0 ORDER BY RAND() LIMIT 8";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
 
         //　同じ学校の生徒表示
