@@ -72,3 +72,8 @@ body > *:not(.sidebar) {
 .sidebar ul li a:hover {
   background-color: #dadada;
 }
+
+.imgCyrcle {
+  width: 50px;
+  border-radius: 50%;
+}
