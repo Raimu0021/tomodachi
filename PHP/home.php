@@ -5,6 +5,13 @@ require './common/card_component.php';
 require './common/db-connect.php'; 
 require './common/searchSchool.php';
 $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT school_id FROM users WHERE user_id = :user_id";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+$stmt->execute();
+$school_id = $stmt->fetchColumn();
 ?>
 
 <!-- 検索欄 -->
@@ -58,7 +65,7 @@ $(document).ready(function() {
 <div class="container">
     <div class="row">
     <?php
-        $school_id = $loggedInUser ? $loggedInUser['school_id'] : null;
+        // $school_id = $loggedInUser ? $loggedInUser['school_id'] : null;
         $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE school_id = :school_id AND is_private = 0 ORDER BY RAND() LIMIT 8";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
@@ -89,7 +96,7 @@ $(document).ready(function() {
     <?php
         if($loggedInUser != null) {
 
-            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id AND is_private = 0";
+            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :user_id AND is_private = 0";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
             $stmt->execute();
