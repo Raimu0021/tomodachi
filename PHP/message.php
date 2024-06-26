@@ -3,28 +3,33 @@ require 'common/header.php';
 require 'common/db-connect.php';
 
 $user_id = 1;
-$eror_message = "";
+$error_message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
     $chat_id = $_POST['chat_id'];
     $message = $_POST['message'];
     $sender_id = $_POST['sender_id'];
-    
 
     if (!empty($message)) {
         $stmt = $conn->prepare('INSERT INTO messages (chat_id, sender_id, message, message_at) VALUES (?, ?, ?, NOW())');
-        $stmt->execute([$chat_id, $sender_id, $message]);
-    }else{
-        $eror_message = "メッセージを入力してください";
+
+        if ($stmt->execute([$chat_id, $sender_id, $message])) {
+            // メッセージが正常に挿入された場合の処理
+        } else {
+            $error_message = "メッセージの送信に失敗しました";
+        }
+    } else {
+        $error_message = "メッセージを入力してください";
     }
 }
 
-$chat_id = $_POST['chat_id'];
+$chat_id = $_POST['chat_id'] ?? ''; // POSTが存在しない場合のデフォルト値
+
 $messages = $conn->prepare('SELECT * FROM messages WHERE chat_id = ? ORDER BY message_at');
 $messages->execute([$chat_id]);
 ?>
 
-<link rel="stylesheet" href="../CSS/message.css">
+<link rel="stylesheet" href="../CSS/chat.css">
 
 <script>
 function fetchMessages() {
@@ -47,8 +52,10 @@ function fetchMessages() {
             messageDiv.textContent = message.message;
             messagesContainer.appendChild(messageDiv);
         });
+
     })
     .catch(error => console.error('Error:', error));
+
 }
 
 // HTMLが完全に読み込まれた後にメッセージを取得
@@ -56,11 +63,13 @@ document.addEventListener('DOMContentLoaded', fetchMessages);
 
 // 1秒ごとにメッセージを更新
 setInterval(fetchMessages, 1000);
+        // スクロールを最下部に設定
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
 </script>
 
 
 <div class="contents">
-    <div class="messages">
+    <div class="messages" id="chat_area">
         <!-- JavaScriptによって動的にメッセージが挿入されます -->
     </div>
     
@@ -75,12 +84,10 @@ setInterval(fetchMessages, 1000);
         </select>
         <input type="text" name="message">
         <button type="submit" name="send">送信</button>
-        <p><?php echo $eror_message;?></p>
+        <p><?php echo $error_message;?></p>
     </form>
 
     <a href="chat_list.php">もどる</a>
 </div>
-
-
 
 <?php require 'common/footer.php';?>
