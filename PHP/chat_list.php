@@ -1,13 +1,18 @@
 <?php 
+session_start();
+
 require 'common/header.php';
 require 'common/db-connect.php';
 
-$user_id = 1;
+
+$user_id = $_SESSION['id'];
+
 
 $chat_ids = $conn->prepare('SELECT * FROM participants WHERE user_id=?');
 $chat_ids->execute([$user_id]);
 
 ?>
+<link rel="stylesheet" href="../CSS/chat.css">
 
 <div class="contents">
     <?php
@@ -28,7 +33,7 @@ $chat_ids->execute([$user_id]);
             $last_message_text = $last_message['message'];
         }
     ?>
-        <form action="message.php" method="post">
+        <form action="message.php" method="post" class="chats">
             <input type="hidden" name="chat_id" value="<?php echo htmlspecialchars($chat['chat_id'], ENT_QUOTES, 'UTF-8'); ?>">
             <button type="submit">
                 <p><?php echo htmlspecialchars($chat['chat_id'], ENT_QUOTES, 'UTF-8'); ?></p>
