@@ -1,23 +1,34 @@
-<?php require 'common/header.php' ?>
+<?php 
+require 'common/header.php' ;
+require 'date_card_component.php';
+require './common/db-connect.php'; 
+$loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+?>
+<!-- いいねユーザー表示 -->
+        
+<?php
+        if($loggedInUser != null) {
 
-<div class="container">
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-</div>
+            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id AND is_private = 0";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
+            $stmt->execute();
+    
+            while($like = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id";
+                $stmt2 = $conn->prepare($sql);
+                $stmt2->bindParam(':liked_user_id', $like['liked_user_id'], PDO::PARAM_INT);
+                $stmt2->execute();
+                
+                while($user = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<h2>いいねした人</h2>";
+                    echo '<div class="col-md-3 mb-4">';
+                    renderCard($user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
+                    echo '</div>';
+                }
+            }
+        }
+    ?>
 
-<?php require 'common/footer.php' ?>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="utf-8">
-    <title>デート画面</title>
-</head>
-<body>
-    <div>いいねした人</div>
-    <input type="button" value="デート！">
-    <div>デート申請</div>
-    <input type="button" value="デート！">
-    <input type="button" value="断る">
-</body>
+<?php require './common/footer.php'; ?>
+
