@@ -1,6 +1,6 @@
 <?php 
 require 'common/header.php' ;
-
+require 'date_card_component.php';
 require './common/db-connect.php'; 
 $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 ?>
