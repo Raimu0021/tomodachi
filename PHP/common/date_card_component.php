@@ -1,29 +1,23 @@
 <?php
 
 // db-connect.phpと一緒に読み込むように　（学校名が表示されません）
-function renderCard($profile_image, $user_name, $date_of_birth, $gender, $school_id) {
+function renderDateCard($profile_image, $user_name, $date_of_birth, $gender, $school_id) {
     
     $profile_image = $profile_image ? $profile_image :'../img/default-avatar.webp';
     $age = calculateAge($date_of_birth);
     $gender = convertGenderToJapanese($gender);
     $school = getSchoolName($school_id);
 
-    /* 
-    - いいねボタンの処理
-    ・相手のidと自分のidをlikesデータベースで検索する　見つからなかったら空のハート
-    ・ない場合
-    クリックされたらlikesデータベースに登録
-    ・ある場合
-    クリックされたらlikesデータベースから削除
-    */
     echo "
     <div class='card'>
         <img src='$profile_image' alt='$user_name'>
         <div class='card-body'>
             <h2>$user_name</h2>
-            <button>Like</button>
+            
             <p>$age 歳/$gender</p>
             <p>$school</p>
+            <button onclick='requestDate($user_id, $partner_id)'>デート！</button>  
+
         </div>
     </div>";
 }
