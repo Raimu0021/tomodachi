@@ -4,6 +4,7 @@
 
 .chat_list {
   width: 30%;
+  height: 100vh;
   border: #8e8e8e solid 1px;
 }
 
@@ -27,16 +28,19 @@
 
 .chat_area {
   width: 100%;
+  height: 100vh;
 }
 
 .close_chat {
   background-color: white;
   border: none;
+  margin: 0 0 0 90%;
 }
 
 .chat_name {
   display: flex;
   border: #8e8e8e solid 1px;
+  height: 8vh;
 }
 
 .chat_name p {
@@ -44,7 +48,7 @@
 }
 
 .message_area {
-  height: 700px;
+  height: 80vh;
   overflow-y: scroll;
 }
 
@@ -65,8 +69,10 @@
 
 .input_area {
   width: 90%;
+  height: 12vh;
   margin: 0 auto 0 auto;
-  border: #8e8e8e soli 1px;
+  border: #8e8e8e solid 1px;
+  text-align: center;
 }
 
 .input_message {
