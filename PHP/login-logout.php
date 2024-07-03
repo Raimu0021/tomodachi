@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
                 } elseif (!password_verify($password, $user['password'])) {
                     $errors['login'] = 'メールアドレスもしくはパスワードが間違っています。';
                 } else {
-                    $_SESSION['id'] = $user['user_id'];
+                    $_SESSION['user_id'] = $user['user_id'];
                     header('Location: home.php');
                     exit;
                 }
