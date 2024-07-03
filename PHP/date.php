@@ -50,6 +50,25 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             }
         }
     ?>
+    <script>
+    function requestDate(userId, partnerId) {
+        // AJAXリクエストをバックエンドに送信
+        fetch('/path/to/date_request_handler.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId: userId, partnerId: partnerId }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+    </script>
 
 <?php require './common/footer.php'; ?>
 
