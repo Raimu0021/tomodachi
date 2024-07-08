@@ -30,13 +30,14 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         // 1. ログインユーザーがいいねしたユーザーを取得
         if($loggedInUser != null) {
 
-            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id AND is_private = 0";
+            $sql = "SELECT liked_user_id FROM likes WHERE user_id = :user_id ORDER BY RAND() LIMIT 8";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
             $stmt->execute();
-    
+
             while($like = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id";
+                // ここで$like['liked_user_id']を使用して、いいねしたユーザーのプロフィール情報を取得できます
+                $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id AND is_private = 0";
                 $stmt2 = $conn->prepare($sql);
                 $stmt2->bindParam(':liked_user_id', $like['liked_user_id'], PDO::PARAM_INT);
                 $stmt2->execute();
@@ -44,7 +45,7 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 while($user = $stmt2->fetch(PDO::FETCH_ASSOC)) {
                     echo "<h2>いいねした人</h2>";
                     echo '<div class="col-md-3 mb-4">';
-                    renderDateCard($user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
+                    renderDateCard($_SESSION['user_id'], $like['liked_user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
                     echo '</div>';
                 }
             }
@@ -52,7 +53,7 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         
     ?>
     <script>
-    function requestDate(userId, partnerId) {
+    function requestDate(sender_id, receiver_id) {
         // AJAXリクエストをバックエンドに送信
         fetch('/path/to/date_request_handler.php', {
             method: 'POST',
