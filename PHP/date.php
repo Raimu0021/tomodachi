@@ -50,6 +50,10 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 }
             }
         }
+
+        // 2. デート申請を送ってきたユーザーを取得
+        // 3. いいねを送ってきたユーザーを取得
+        // option 1. デート申請を送ったユーザーを取得（デートボタンの非表示）
         
     ?>
     <script>
