@@ -7,7 +7,8 @@ $errors = []; // エラーメッセージを格納する配列
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
     $formType = $_POST['form_type'];
     $email = $_POST['email'];
-    $password = $_POST['pass'];
+    $password = $_POST['password'] ?? $_POST['pass']; // パスワードフィールドの名前が異なるため修正
+    $user_name = $_POST['username'] ?? ''; // 新規登録の場合のユーザー名
 
     // メールアドレスのバリデーション
     if (empty($email)) {
@@ -36,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
                     $errors['login'] = 'メールアドレスもしくはパスワードが間違っています。';
                 } else {
                     $_SESSION['user_id'] = $user['user_id'];
+                    $_SESSION['loggedin'] = true;
                     header('Location: home.php');
                     exit;
                 }
@@ -43,7 +45,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
                 $errors['db'] = 'エラーが発生しました: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
             }
         } elseif ($formType == 'signup') {
-            // サインアップ処理をここに追加
+            try {
+                // メールアドレスの重複チェック
+                $sql = "SELECT * FROM users WHERE email = :email";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+                $stmt->execute();
+                $existingUser = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($existingUser) {
+                    $errors['email'] = 'このメールアドレスは既に登録されています。';
+                } else {
+                    // パスワードをハッシュ化
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                    $sql = "INSERT INTO users (user_name, email, password) VALUES (:user_name, :email, :password)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindValue(':user_name', $user_name, PDO::PARAM_STR);
+                    $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+                    $stmt->bindValue(':password', $hashedPassword, PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    $_SESSION['user_id'] = $conn->lastInsertId();
+                    $_SESSION['loggedin'] = true;
+                    header('Location: home.php');
+                    exit;
+                }
+            } catch (PDOException $e) {
+                $errors['db'] = 'エラーが発生しました: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+            }
         }
     }
 }
@@ -125,213 +155,208 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
             z-index: 2
         }
 
-.container.right-panel-active .container--signin {
-    transform: translateX(100%);
-}
+        .container.right-panel-active .container--signin {
+            transform: translateX(100%);
+        }
 
-.container--signup {
-    left: 0;
-    opacity: 0;
-    width: 50%;
-    z-index: 1;
-}
+        .container--signup {
+            left: 0;
+            opacity: 0;
+            width: 50%;
+            z-index: 1;
+        }
 
-.container.right-panel-active .container--signup {
-    animation: show 0.6s;
-    opacity: 1;
-    transform: translateX(100%);
-    z-index: 5;
-}
+        .container.right-panel-active .container--signup {
+            animation: show 0.6s;
+            opacity: 1;
+            transform: translateX(100%);
+            z-index: 5;
+        }
 
-.container__overlay {
-    height: 100%;
-    left: 50%;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    transition: transform 0.6s ease-in-out;
-    width: 50%;
-    z-index: 100;
-}
+        .container__overlay {
+            height: 100%;
+            left: 50%;
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            transition: transform 0.6s ease-in-out;
+            width: 50%;
+            z-index: 100;
+        }
 
-.container.right-panel-active .container__overlay {
-    transform: translateX(-100%);
-}
+        .container.right-panel-active .container__overlay {
+            transform: translateX(-100%);
+        }
 
-.overlay {
-    background-color: var(--lightblue);
-    background: url("../CSS/copuruLogo.jpg") no-repeat center center fixed;
-    background-size: cover;
-    height: 100%;
-    left: -100%;
-    position: relative;
-    transform: translateX(0);
-    transition: transform 0.6s ease-in-out;
-    width: 200%;
-}
+        .overlay {
+            background-color: var(--lightblue);
+            background: url("../CSS/copuruLogo.jpg") no-repeat center center fixed;
+            background-size: cover;
+            height: 100%;
+            left: -100%;
+            position: relative;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+            width: 200%;
+        }
 
-.container.right-panel-active .overlay {
-    transform: translateX(50%);
-}
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
 
-.overlay__panel {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
-    position: absolute;
-    text-align: center;
-    top: 0;
-    transform: translateX(0);
-    transition: transform 0.6s ease-in-out;
-    width: 50%;
-}
+        .overlay__panel {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: center;
+            position: absolute;
+            text-align: center;
+            top: 0;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+            width: 50%;
+        }
 
-.overlay--left {
-    transform: translateX(-20%);
-}
+        .overlay--left {
+            transform: translateX(-20%);
+        }
 
-.container.right-panel-active .overlay--left {
-    transform: translateX(0);
-}
+        .container.right-panel-active .overlay--left {
+            transform: translateX(0);
+        }
 
-.overlay--right {
-    right: 0;
-    transform: translateX(0);
-}
+        .overlay--right {
+            right: 0;
+            transform: translateX(0);
+        }
 
-.container.right-panel-active .overlay--right {
-    transform: translateX(20%);
-}
+        .container.right-panel-active .overlay--right {
+            transform: translateX(20%);
+        }
 
-.btn {
-    background-color: var(--blue);
-    background-image: linear-gradient(90deg, var(--blue) 0%, var(--lightblue) 74%);
-    border-radius: 20px;
-    border: 1px solid var(--blue);
-    color: var(--white);
-    cursor: pointer;
-    font-size: 0.8rem;
-    font-weight: bold;
-    letter-spacing: 0.1rem;
-    padding: 0.9rem 4rem;
-    text-transform: uppercase;
-    transition: transform 80ms ease-in;
-}
+        .btn {
+            background-color: var(--blue);
+            background-image: linear-gradient(90deg, var(--blue) 0%, var(--lightblue) 74%);
+            border-radius: 20px;
+            border: 1px solid var(--blue);
+            color: var(--white);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            letter-spacing: 0.1rem;
+            padding: 0.9rem 4rem;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+        }
 
-.form > .btn {
-    margin-top: 1.5rem;
-}
+        .form > .btn {
+            margin-top: 1.5rem;
+        }
 
-.btn:active {
-    transform: scale(0.95);
-}
+        .btn:active {
+            transform: scale(0.95);
+        }
 
-.btn:focus {
-    outline: none;
-}
+        .btn:focus {
+            outline: none;
+        }
 
-.form {
-    background-color: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 3rem;
-    height: 100%;
-    text-align: center;
-}
+        .form {
+            background-color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 3rem;
+            height: 100%;
+            text-align: center;
+        }
 
-.input {
-    background-color: #fff;
-    border: none;
-    padding: 0.9rem 0.9rem;
-    margin: 0.5rem 0;
-    width: 100%;
-}
+        .input {
+            background-color: #fff;
+            border: none;
+            padding: 0.9rem 0.9rem;
+            margin: 0.5rem 0;
+            width: 100%;
+        }
 
-@keyframes show {
-    0%,
-    49.99% {
-        opacity: 0;
-        z-index: 1;
-    }
+        @keyframes show {
+            0%,
+            49.99% {
+                opacity: 0;
+                z-index: 1;
+            }
 
-    50%,
-    100% {
-        opacity: 1;
-        z-index: 5;
-    }
-}
-</style>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const signInBtn = document.getElementById("signIn");
-    const signUpBtn = document.getElementById("signUp");
-    const fistForm = document.getElementById("form1");
-    const secondForm = document.getElementById("form2");
-    const container = document.querySelector(".container");
+            50%,
+            100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const signInBtn = document.getElementById("signIn");
+            const signUpBtn = document.getElementById("signUp");
+            const container = document.querySelector(".container");
 
-    signInBtn.addEventListener("click", () => {
-        container.classList.remove("right-panel-active");
-    });
+            signInBtn.addEventListener("click", () => {
+                container.classList.remove("right-panel-active");
+            });
 
-    signUpBtn.addEventListener("click", () => {
-        container.classList.add("right-panel-active");
-    });
-
-    fistForm.addEventListener("submit", (e) => e.preventDefault());
-    secondForm.addEventListener("submit", (e) => e.preventDefault());
-});
-</script>
-<title>ログイン</title>
+            signUpBtn.addEventListener("click", () => {
+                container.classList.add("right-panel-active");
+            });
+        });
+    </script>
+    <title>ログイン</title>
 </head>
 <body>
 <div class="container right-panel-active">
-<!-- Sign Up -->
-<div class="container__form container--signup">
-    <form action="" method="POST" class="form" id="form1">
-        <h2 class="form__title">新規登録</h2>
-        <input type="text" placeholder="User" name="username" class="input" />
-        <input type="email" placeholder="Email" name="email" class="input" />
-        <input type="password" placeholder="Password" name="password" class="input" />
-        <input type="hidden" name="form_type" value="signup">
-        <button type="submit" class="btn">新規登録</button>
-    </form>
-</div>
+    <!-- Sign Up -->
+    <div class="container__form container--signup">
+        <form action="" method="POST" class="form" id="form1">
+            <h2 class="form__title">新規登録</h2>
+            <input type="text" placeholder="User" name="username" class="input" />
+            <input type="email" placeholder="Email" name="email" class="input" />
+            <input type="password" placeholder="Password" name="password" class="input" />
+            <input type="hidden" name="form_type" value="signup">
+            <button type="submit" class="btn">新規登録</button>
+        </form>
+    </div>
 
-<!-- Sign In -->
-<div class="container__form container--signin">
-    <form action="" method="POST" class="form" >
-        <h2 class="form__title">サインイン</h2>
-        <input type="email" placeholder="Email" name="email" class="input" />
-        <input type="password" placeholder="Password" name="pass" class="input" />
-        <input type="hidden" name="form_type" value="signin">
-        <button type="submit" class="btn">サインイン</button>
-    </form>
-</div>
+    <!-- Sign In -->
+    <div class="container__form container--signin">
+        <form action="" method="POST" class="form">
+            <h2 class="form__title">サインイン</h2>
+            <input type="email" placeholder="Email" name="email" class="input" />
+            <input type="password" placeholder="Password" name="pass" class="input" />
+            <input type="hidden" name="form_type" value="signin">
+            <button type="submit" class="btn">サインイン</button>
+        </form>
+    </div>
 
-<!-- Overlay -->
-<div class="container__overlay">
-    <div class="overlay">
-        <div class="overlay__panel overlay--left">
-            <button class="btn" id="signIn">サインイン</button>
-        </div>
-        <div class="overlay__panel overlay--right">
-            <button class="btn" id="signUp">新規登録</button>
+    <!-- Overlay -->
+    <div class="container__overlay">
+        <div class="overlay">
+            <div class="overlay__panel overlay--left">
+                <button class="btn" id="signIn">サインイン</button>
+            </div>
+            <div class="overlay__panel overlay--right">
+                <button class="btn" id="signUp">新規登録</button>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 <!-- エラーメッセージ表示 -->
 <div class="flexbox">
-<div class="content">
-    <?php foreach ($errors as $error): ?>
-        <p style="color: red;"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
-    <?php endforeach; ?>
-</div>
+    <div class="content">
+        <?php foreach ($errors as $error): ?>
+            <p style="color: red;"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php endforeach; ?>
+    </div>
 </div>
 </body>
 </html>

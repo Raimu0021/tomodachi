@@ -1,5 +1,4 @@
 <?php
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -10,14 +9,14 @@ include 'common/db-connect.php';
 $message = '';
 $current_email = '';
 
-if (isset($_SESSION['id'])) {
-    $id = $_SESSION['id'];
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
     
     // 現在のメールアドレスを取得
-    $sql = "SELECT email FROM users WHERE user_id = :id";  // ここで 'user_id' を使用しています
+    $sql = "SELECT email FROM users WHERE user_id = :user_id";  // ここで 'user_id' を使用しています
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     
@@ -38,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if ($new_email === $confirm_email) {
         // 新しいメールアドレスを更新
-        $sql = "UPDATE users SET email = :new_email WHERE user_id = :id";
+        $sql = "UPDATE users SET email = :new_email WHERE user_id = :user_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':new_email', $new_email, PDO::PARAM_STR);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         
         if ($stmt->execute()) {
             $message = "メールアドレスが更新されました。";
