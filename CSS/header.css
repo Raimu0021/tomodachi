@@ -73,7 +73,14 @@ body > *:not(.sidebar) {
   background-color: #dadada;
 }
 
-.imgCyrcle {
+#user {
+  margin-block: auto 0;
+  height: auto;
+}
+
+#user img {
+  height: 50px;
   width: 50px;
   border-radius: 50%;
+  object-fit: cover;
 }
