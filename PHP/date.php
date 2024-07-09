@@ -26,17 +26,34 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         }
         //ここまで
 
-        // ログインユーザーがデート中でない場合
-        // 1. ログインユーザーがいいねしたユーザーを取得
+        // ログインユーザーがデート中でない場合        
         if($loggedInUser != null) {
 
+            // ログインユーザーのIDをセッションから取得
+            $loggedInUserId = $_SESSION['user_id'];
+        
+            // デート申請を送ってきたユーザーを取得
+            $dateRequestsSql = "SELECT u.* FROM users u JOIN dates d ON u.user_id = d.sender_id WHERE d.receiver_id = :loggedInUserId AND d.is_hidden = 0 ORDER BY RAND() LIMIT 8";
+            $stmt = $pdo->prepare($dateRequestsSql);
+            $stmt->execute(['loggedInUserId' => $loggedInUserId]);
+            $dateRequestUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+            // いいねを送ってきたユーザーを取得
+            $likesSql = "SELECT u.* FROM users u JOIN likes l ON u.user_id = l.user_id WHERE l.liked_user_id = :loggedInUserId ORDER BY RAND() LIMIT 8";
+            $stmt = $pdo->prepare($likesSql);
+            $stmt->execute(['loggedInUserId' => $loggedInUserId]);
+            $usersWhoLikedLoggedInUser = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+            
             $sql = "SELECT liked_user_id FROM likes WHERE user_id = :user_id ORDER BY RAND() LIMIT 8";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
             $stmt->execute();
-
-            while($like = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                // ここで$like['liked_user_id']を使用して、いいねしたユーザーのプロフィール情報を取得できます
+            $userIdsLikedByLoggedInUser = $stmt->fetchAll(PDO::FETCH_ASSOC); // いいねしたユーザーのIDを取得
+        
+            // 1. ログインユーザーがいいねしたユーザーの詳細を取得
+            foreach($userIdsLikedByLoggedInUser as $like) {
+                
                 $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id AND is_private = 0";
                 $stmt2 = $conn->prepare($sql);
                 $stmt2->bindParam(':liked_user_id', $like['liked_user_id'], PDO::PARAM_INT);
@@ -49,10 +66,29 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                     echo '</div>';
                 }
             }
+
+            // 2. デート申請を送ってきたユーザーを取得
+            foreach($dateRequestUsers as $user) {
+                echo "<h2>デート申請を送ってきたユーザー</h2>";
+                echo '<div class="col-md-3 mb-4">';
+                renderDateCard($_SESSION['user_id'], $user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
+                echo '</div>';
+            }
+
+            // 3. いいねを送ってきたユーザーを取得
+            foreach($usersWhoLikedLoggedInUser as $user) {
+                echo "<h2>いいねを送ってきたユーザー</h2>";
+                echo '<div class="col-md-3 mb-4">';
+                renderDateCard($_SESSION['user_id'], $user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
+                echo '</div>';
+            }
         }
 
-        // 2. デート申請を送ってきたユーザーを取得
-        // 3. いいねを送ってきたユーザーを取得
+        
+        
+
+
+        // 4. 断る、キャンセルボタンを作成する
         // option 1. デート申請を送ったユーザーを取得（デートボタンの非表示）
         
     ?>
