@@ -8,8 +8,16 @@
   border: #8e8e8e solid 1px;
 }
 
+.title {
+  height: 5vh;
+  width: 100%;
+  font-size: 20px;
+  border: 1px solid #8e8e8e;
+  padding: 10px;
+}
+
 .chat_list form {
-  height: 450px;
+  width: 100%;
 }
 
 .chat {
@@ -17,12 +25,37 @@
   border: none;
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.noneId {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat .name {
+  margin-left: 5px;
+  margin-bottom: 0;
+  font-size: 20px;
+}
+
+.chat .last_message {
+  margin: 5px auto 5px 5px;
+  width: 80%;
+  text-align: left;
+  color: gray;
+}
+
+.chat .last_message_date {
+  margin: 0 auto 0 5px;
 }
 
 .under_line {
   background-color: #8e8e8e;
   height: 1px;
-  width: 60%;
+  width: 80%;
   margin: 0 auto 0 auto;
 }
 
@@ -31,56 +64,74 @@
   height: 100vh;
 }
 
-.close_chat {
-  background-color: white;
-  border: none;
-  margin: 0 0 0 90%;
-}
-
 .chat_name {
   display: flex;
   border: #8e8e8e solid 1px;
-  height: 8vh;
+  height: 5vh;
+  align-items: center;
+}
+
+.chat_name form {
+  margin: 0 10px 0 auto;
+}
+
+.close_chat {
+  background-color: white;
+  border: none;
+  color: #3a7795;
 }
 
 .chat_name p {
   font-size: 20px;
+  margin: 0 0 0 10px;
 }
 
 .message_area {
-  height: 80vh;
+  height: 87vh;
   overflow-y: scroll;
 }
 
-.send {
-  background-color: white;
-}
-
+.send,
 .receive {
-  background-color: #94c0cf;
+  display: flex;
+  margin-top: 8px;
 }
 
 .message_text {
+  width: fit-content;
+  max-width: 450px;
+  padding: 10px;
+}
+
+.send .message_text {
+  border: #cdcdcd solid 1px;
+  background-color: white;
+  margin-right: 5px;
+}
+.send .message_at {
+  margin: auto 3px 1px auto;
+}
+
+.receive .message_text {
+  background-color: #94c0cf;
+  margin-left: 5px;
+}
+.receive .message_at {
+  margin: auto auto 1px 3px;
 }
 
 .message_at {
+  width: auto;
   font-size: 9px;
+}
+
+.message_date {
+  margin: 20px auto;
+  text-align: center;
 }
 
 .input_area {
   width: 90%;
-  height: 12vh;
-  margin: 0 auto 0 auto;
-  border: #8e8e8e solid 1px;
-  text-align: center;
-}
-
-.input_message {
-  border: none;
-}
-
-.send_message {
-  background-color: white;
-  border: #8e8e8e solid 1px;
-  color: #3a7795;
+  height: 5vh;
+  margin: 10px auto 10px auto;
 }
