@@ -40,7 +40,7 @@
         
     </div>
     <div class="notification" style="display:none;">
-            <?php require "./notification.php";?>
+            <?php //require "../tuti.php";?>
     </div>
     <style>
         .notification {
