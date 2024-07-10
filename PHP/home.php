@@ -65,7 +65,6 @@ $(document).ready(function() {
 <div class="container">
     <div class="row">
     <?php
-        // $school_id = $loggedInUser ? $loggedInUser['school_id'] : null;
         $sql = "SELECT * FROM users WHERE school_id = :school_id AND user_id != :user_id AND is_private = 0 ORDER BY RAND() LIMIT 8";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
@@ -78,7 +77,7 @@ $(document).ready(function() {
             echo "<h2>あなたと同じ学校</h2>";
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 echo '<div class="col-md-3 mb-4">';
-                renderCard($row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id']);
+                renderCard($row['user_id'], $row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id']);
                 echo '</div>';
             }
         }elseif ($loggedInUser != null && $school_id == null) {
@@ -111,7 +110,7 @@ $(document).ready(function() {
                 while($user = $stmt2->fetch(PDO::FETCH_ASSOC)) {
                     echo "<h2>いいね済み</h2>";
                     echo '<div class="col-md-3 mb-4">';
-                    renderCard($user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
+                    renderCard($user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
                     echo '</div>';
                 }
             }
@@ -137,12 +136,15 @@ $(document).ready(function() {
 
         while($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
             echo '<div class="col-md-3 mb-4">';
-            renderCard($user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
+            renderCard($user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
             echo '</div>';
         }
     ?>
 <!-- ランダムユーザー表示ここまで -->
-        
+      
+<!-- いいね処理 -->
+<script src="../js/likeButtonHandler.js"></script>
+
     <?php
         $conn = null;
     ?>
