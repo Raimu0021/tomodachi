@@ -10,14 +10,14 @@ include 'common/db-connect.php';
 $message = '';
 $current_password = '';
 
-if (isset($_SESSION['id'])) {
-    $id = $_SESSION['id'];
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
     
     // 現在のパスワードを取得
-    $sql = "SELECT password FROM users WHERE user_id = :id";  // ここで 'user_id' を使用しています
+    $sql = "SELECT password FROM users WHERE user_id = :user_id";  // ここで 'user_id' を使用しています
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     
@@ -41,10 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($new_password === $confirm_password) {
             // 新しいパスワードをハッシュ化して更新
             $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-            $sql = "UPDATE users SET password = :new_password WHERE user_id = :id";
+            $sql = "UPDATE users SET password = :new_password WHERE user_id = :user_id";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':new_password', $hashed_password, PDO::PARAM_STR);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             
             if ($stmt->execute()) {
                 $message = "パスワードが更新されました。";
@@ -112,7 +112,6 @@ $conn = null;
         color: #555;
     }
 
-    input[type="text"],
     input[type="password"] {
         width: 100%;
         padding: 10px;

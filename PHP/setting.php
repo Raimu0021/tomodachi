@@ -14,7 +14,7 @@
         <form action="password.php" method="get">
             <button type="submit">パスワード変更</button>
         </form>
-        <form action="delete_account.php" method="get">
+        <form action="Account_deletion.php" method="get">
             <button type="submit">アカウント削除</button>
         </form>
     </div>

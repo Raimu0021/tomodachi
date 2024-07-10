@@ -1,7 +1,7 @@
 <?php
 
 // db-connect.phpと一緒に読み込むように　（学校名が表示されません）
-function renderDateCard($profile_image, $user_name, $date_of_birth, $gender, $school_id) {
+function renderDateCard($sender_id, $receiver_id, $profile_image, $user_name, $date_of_birth, $gender, $school_id) {
     
     $profile_image = $profile_image ? $profile_image :'../img/default-avatar.webp';
     $age = calculateAge($date_of_birth);
@@ -16,7 +16,7 @@ function renderDateCard($profile_image, $user_name, $date_of_birth, $gender, $sc
             
             <p>$age 歳/$gender</p>
             <p>$school</p>
-            <button onclick='requestDate($user_id, $partner_id)'>デート！</button>  
+            <button onclick='requestDate($sender_id, $receiver_id)'>デート！</button>  
 
         </div>
     </div>";
