@@ -37,7 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
                     $errors['login'] = 'メールアドレスもしくはパスワードが間違っています。';
                 } else {
                     $_SESSION['user_id'] = $user['user_id'];
+                    $sql = "UPDATE users SET online_flg = 1 WHERE user_id = :user_id";
+                    $online = $conn->prepare($sql);
+                    $online->bindValue(':user_id', $user['user_id'], PDO::PARAM_STR);
+                    $online->execute();
                     $_SESSION['loggedin'] = true;
+
                     header('Location: home.php');
                     exit;
                 }

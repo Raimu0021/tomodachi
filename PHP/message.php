@@ -11,15 +11,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
 
         if ($stmt->execute([$chat_id, $sender_id, $message])) {
             // メッセージが正常に挿入された場合の処理
+            $participant_query = $conn->prepare('SELECT * FROM participants WHERE chat_id=? AND user_id != ?');
+            $participant_query->execute([$chat_id, $sender_id]);
+            foreach($participant_query as $participant){
+                $sql = "SELECT * FROM users WHERE user_id = :id";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindValue(':id', $participant['user_id'], PDO::PARAM_STR);
+                $stmt->execute();
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                if($user['online_flg'] == 0){
+                    $in_noti = $conn->prepare('INSERT INTO notification (user_id, sender_id, type, content, notification_at) VALUES (?,?,?,?, NOW())');
+                    $in_noti->execute([$participant['user_id'], $sender_id, "message", "新しいメッセージがあります"]);   
+                }
+            }
         } else {
-            $error_message = "メッセージの送信に失敗しました";
+            $error_message = "*メッセージの送信に失敗しました*";
         }
     } else {
-        $error_message = "メッセージを入力してください";
+        $error_message = "*メッセージを入力してください*";
     }
 }
 
 $chat_id = $_POST['chat_id'] ?? ''; // POSTが存在しない場合のデフォルト値
+$chat_name = $_POST['chat_name'];
 
 $messages = $conn->prepare('SELECT * FROM messages WHERE chat_id = ? ORDER BY message_at');
 $messages->execute([$chat_id]);
@@ -127,6 +141,8 @@ fetchMessages();
 <form action="" method="post">
     <input type="hidden" name="chat_id" value="<?php echo htmlspecialchars($chat_id, ENT_QUOTES, 'UTF-8'); ?>">
     <input type="hidden" name="sender_id" value="<?php echo htmlspecialchars($user_id, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="chat_name" value="<?php echo htmlspecialchars($chat_name, ENT_QUOTES, 'UTF-8'); ?>">
+
     <div class="input-group input_area">
         <input type="text" class="form-control input_message" name="message" maxlength=4000 placeholder="<?php echo $error_message;?>" aria-label="<?php echo $error_message;?>" aria-describedby="button-addon2">
         <button class="btn btn-outline-secondary send_message" name="send" type="submit" id="button-addon2">送信</button>
