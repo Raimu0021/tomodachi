@@ -69,6 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
                     $stmt->bindValue(':user_name', $user_name, PDO::PARAM_STR);
                     $stmt->bindValue(':email', $email, PDO::PARAM_STR);
                     $stmt->bindValue(':password', $hashedPassword, PDO::PARAM_STR);
+                    //こここここここここおここここここここここｋｊ
+                    //ここここここここここここここここここ
                     $stmt->bindValue(':profile_image', '../img/default-avater.png', PDO::PARAM_STR);
                     $stmt->execute();
 
