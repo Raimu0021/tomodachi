@@ -14,7 +14,7 @@ $stmt->execute();
 $school_id = $stmt->fetchColumn();
 ?>
 
-<link rel="stylesheet" href="">
+<link rel="stylesheet" href="home.css">
 
 <!-- 検索欄 -->
 

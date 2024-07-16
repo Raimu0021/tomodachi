@@ -1,6 +1,9 @@
 document.addEventListener('click', function(e) {
-    if (e.target.matches('.like-btn')) {
-        const userId = e.target.dataset.userId;
+    if (e.target.closest('.like-btn')) {
+        const button = e.target.closest('.like-btn');
+        const userId = button.dataset.userId;
+        const icon = button.querySelector('i');
+        
         fetch('like_handler.php', {
             method: 'POST',
             body: new URLSearchParams({ 'liked_user_id': userId }),
@@ -12,9 +15,11 @@ document.addEventListener('click', function(e) {
         .then(data => {
             if (data.success) {
                 if (data.liked) {
-                    e.target.classList.add('liked');
+                    icon.classList.remove('fa-regular', 'fa-heart');
+                    icon.classList.add('fa-solid', 'fa-heart');
                 } else {
-                    e.target.classList.remove('liked');
+                    icon.classList.remove('fa-solid', 'fa-heart');
+                    icon.classList.add('fa-regular', 'fa-heart');
                 }
             }
         })

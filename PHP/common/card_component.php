@@ -7,7 +7,7 @@ function renderCard($user_id, $profile_image, $user_name, $date_of_birth, $gende
     $age = calculateAge($date_of_birth);
     $gender = convertGenderToJapanese($gender);
     $school = getSchoolName($school_id);
-    $liked = isLikedByUser($user_id, $current_user_id) ? 'liked' : '';
+    $liked = isLikedByUser($user_id, $current_user_id) ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
 
     echo "
     <div class='card'>
