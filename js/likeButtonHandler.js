@@ -11,7 +11,6 @@ document.addEventListener('click', function(e) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // いいねの状態を更新する処理
                 e.target.classList.toggle('liked');
             }
         })
