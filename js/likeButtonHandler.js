@@ -11,7 +11,11 @@ document.addEventListener('click', function(e) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                e.target.classList.toggle('liked');
+                if (data.liked) {
+                    e.target.classList.add('liked');
+                } else {
+                    e.target.classList.remove('liked');
+                }
             }
         })
         .catch(error => console.error('Error:', error));
