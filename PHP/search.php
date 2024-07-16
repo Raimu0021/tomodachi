@@ -34,7 +34,7 @@ if (count($results) > 0) {
     echo "<p>検索結果に一致する生徒はいませんでした。</p>";
 }
 ?>
-
     </div>
 </div>
 
+<script src="../js/likeButtonHandler.js"></script>
