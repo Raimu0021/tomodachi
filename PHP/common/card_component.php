@@ -14,11 +14,14 @@ function renderCard($user_id, $profile_image, $user_name, $date_of_birth, $gende
         <img src='$profile_image' alt='$user_name'>
         <div class='card-body'>
             <h2>$user_name</h2>
-            <button class='like-btn' data-user-id='{$user_id}'>いいね</button>
+            <button class='like-btn' data-user-id='{$user_id}'>
+                <i class='$liked'></i>
+            </button>
             <p>$age 歳/$gender</p>
             <p>$school</p>
         </div>
     </div>";
+
 }
 
 function calculateAge($date_of_birth){
