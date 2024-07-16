@@ -1,0 +1,13 @@
+.like-btn {
+    background: url('../img/heart-empty.png') no-repeat center center;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+    border: none;
+    cursor: pointer;
+}
+
+.like-btn.liked {
+    background: url('../img/heart-filled.png') no-repeat center center;
+    background-size: contain;
+}

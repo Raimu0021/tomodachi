@@ -14,6 +14,8 @@ $stmt->execute();
 $school_id = $stmt->fetchColumn();
 ?>
 
+<link rel="stylesheet" href="">
+
 <!-- 検索欄 -->
 
 <form action="search.php" method="get" class="mb-4">
