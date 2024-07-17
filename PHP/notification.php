@@ -2,7 +2,6 @@
     通知一覧
 </div>
 <?php
-// データベース接続オブジェクトが既に作成されている前提
 $notification_sql = $conn->prepare('SELECT *,    
     YEAR(notification_at) AS year, 
     MONTH(notification_at) AS month, 
@@ -26,7 +25,13 @@ foreach ($notifications as $no) {
 
     if ($no['type'] == 'message') {
 ?>
-        <p class="noti_text"><a href="chat.php"><?php echo $sender_name . ' ' . $notification_content . ' ' . $notification_date; ?></a></p>
+    <div class="noti_text">
+        <a href="chat.php">
+            <p class="name"><?php echo $sender_name;?></p>
+            <p class="date"><?php echo $notification_date;?></p>
+            <p class="content"><?php echo $notification_content;?></p>
+        </a>
+    </div>
 <?php
     } else if ($no['type'] == 'like') {
 ?>
@@ -43,12 +48,13 @@ foreach ($notifications as $no) {
 <style>
     .noti_title {
         width: 100%;
-        height: 5vh;
-        border: 1px #8e8e8e solid;
+        border-bottom: 1px #dadada solid;
     }
     .noti_text {
         width: 100%;
         height: 7vh;
+        display: flex;
+        flex-wrap: wrap;
     }
     .noti_text a {
         text-decoration: none;
