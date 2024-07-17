@@ -33,7 +33,7 @@ $school_id = $stmt->fetchColumn();
 
 <!-- ユーザー表示 -->
 
-<div class="container">
+<div class="content">
     <div class="row">
     <?php
         $sql = "SELECT * FROM users WHERE school_id = :school_id AND user_id != :user_id AND is_private = 0 ORDER BY RAND() LIMIT 8";
@@ -71,7 +71,7 @@ $school_id = $stmt->fetchColumn();
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
             $stmt->execute();
-    
+
             while($like = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $sql = "SELECT user_id, profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id";
                 $stmt2 = $conn->prepare($sql);
@@ -104,7 +104,7 @@ $school_id = $stmt->fetchColumn();
         }
         
         
-
+        echo '<h2>ランダム表示<h2>';
         while($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
             echo '<div class="col-md-3 mb-4">';
             renderCard($user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id'], $user_id);
