@@ -6,52 +6,40 @@
   width: 30%;
   height: 100vh;
   border-right: #dadada solid 1px;
+  background-color: white;
 }
 
-.title {
-  height: 5vh;
+.chat_list .title {
   width: 100%;
   font-size: 20px;
+  font-weight: 400;
   border-bottom: 1px solid #dadada;
   padding: 10px;
 }
 
-.chat_list form {
-  width: 100%;
-}
-
-.chat {
+.chat_list .chat {
   background-color: white;
   border: none;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
 }
 
-.noneId {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.chat .name {
+.chat_list .chat .name {
   margin-left: 5px;
   margin-bottom: 0;
   font-size: 20px;
 }
 
-.chat .last_message {
+.chat_list .chat .last_message_date {
+  margin: 0 auto 0 15px;
+}
+
+.chat_list .last_message {
   margin: 5px auto 5px 5px;
   width: 80%;
   text-align: left;
   color: gray;
-}
-
-.chat .last_message_date {
-  margin: 0 auto 0 5px;
 }
 
 .chat_area {
@@ -59,30 +47,43 @@
   height: 100vh;
 }
 
-.chat_name {
+.chat_area .noneId {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.chat_area .chat_name {
   display: flex;
   border-bottom: #dadada solid 1px;
-  height: 5vh;
   align-items: center;
+  background: white;
 }
 
-.chat_name form {
+.chat_area .chat_name p {
+  font-size: 20px;
+  margin: 0 0 0 10px;
+  padding: 10px;
+}
+
+.chat_area .chat_name form {
   margin: 0 10px 0 auto;
+  background-color: white;
+  border: none;
+  color: #3a7795;
 }
-
-.close_chat {
+.chat_area .chat_name form button {
   background-color: white;
   border: none;
   color: #3a7795;
 }
 
-.chat_name p {
-  font-size: 20px;
-  margin: 0 0 0 10px;
-}
-
-.message_area {
-  height: 87vh;
+.chat_area .message_area {
+  height: 84%;
   padding: 0 20px;
   overflow-y: scroll;
   /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
@@ -96,45 +97,56 @@
   display: none;
 }
 
-.send,
-.receive {
+.chat_area .message_area .send,
+.chat_area .message_area .receive {
   display: flex;
   margin-top: 8px;
 }
 
-.message_text {
+.chat_area .message_area .message_text {
   width: fit-content;
   max-width: 450px;
   padding: 10px;
 }
-
-.send .message_text {
-  border: #cdcdcd solid 1px;
-  background-color: white;
-}
-.send .message_at {
-  margin: auto 3px 1px auto;
-}
-
-.receive .message_text {
-  background-color: #94c0cf;
-}
-.receive .message_at {
-  margin: auto auto 1px 3px;
-}
-
-.message_at {
+.chat_area .message_area .message_at {
   width: auto;
   font-size: 9px;
 }
-
-.message_date {
-  margin: 20px auto;
-  text-align: center;
+.chat_area .message_area .send .message_text {
+  border: #cdcdcd solid 1px;
+  background-color: white;
+  border-radius: 16px;
 }
 
-.input_area {
-  width: 90%;
-  height: 5vh;
-  margin: 10px auto 10px auto;
+.chat_area .message_area .send .message_at {
+  margin: auto 3px 1px auto;
+}
+
+.chat_area .message_area .receive .message_text {
+  background-color: #94c0cf;
+  border-radius: 16px;
+}
+
+.chat_area .message_area .receive .message_at {
+  margin: auto auto 1px 3px;
+}
+
+.chat_area .message_area .message_date {
+  margin: 30px auto;
+  text-align: center;
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.chat_area .send_form {
+  padding: 25px 20px 0 20px;
+  background: white;
+}
+
+.chat_area .input_area input {
+  background: #f5f5f5;
+}
+
+.chat_area .input_area button {
+  color: #3a7795;
 }

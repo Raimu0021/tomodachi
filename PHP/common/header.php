@@ -1,3 +1,14 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if(!isset($_SESSION['user_id'])){
+  header('Location: login-logout.php');
+  exit;
+}
+?>
+
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -15,6 +26,7 @@
     crossorigin="anonymous"
     ></script>
     
+    <link rel="stylesheet" href="../CSS/style.css">
 </head>
 <body>
     <?php
@@ -40,30 +52,8 @@
         
     </div>
     <div class="notification" style="display:none;">
-
-            <?php require "notification.php";?>
-
+        <?php require "notification.php";?>
     </div>
-    <style>
-        .notification {
-            position: absolute;
-            width: 250px;
-            height: 100%;
-            top: 0;
-            border: solid #dadada 1px;
-            background-color: white;
-            z-index: 10;
-            overflow-y: scroll;
-            /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
-            -ms-overflow-style: none;
-            /*Firefoxへの対応*/
-            scrollbar-width: none;
-        }
-            /*Google Chrome、Safariへの対応*/
-            .notification::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const notification = document.querySelector(".notification");

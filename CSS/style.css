@@ -1,0 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap");
+
+/* <uniquifier>: Use a unique and descriptive class name
+<weight>: Use a value from 100 to 900 */
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Noto Sans JP", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  background-color: #f5f5f5;
+}
+
+body > *:not(.sidebar) {
+  margin-left: 300px; /* ナビゲーションバーの幅と同じ */
+}
+
+.notification {
+  position: absolute;
+  width: 250px;
+  height: 100%;
+  top: 0;
+  border: solid #dadada 1px;
+  background-color: white;
+  z-index: 10;
+  overflow-y: scroll;
+  /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
+  -ms-overflow-style: none;
+  /*Firefoxへの対応*/
+  scrollbar-width: none;
+}
+/*Google Chrome、Safariへの対応*/
+.notification::-webkit-scrollbar {
+  display: none;
+}
