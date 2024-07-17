@@ -3,7 +3,7 @@
 // db-connect.phpと一緒に読み込むように　（学校名が表示されません）
 function renderCard($user_id, $profile_image, $user_name, $date_of_birth, $gender, $school_id, $current_user_id) {
     
-    $profile_image = $profile_image ? $profile_image :'../img/default-avatar.webp';
+    $profile_image = $profile_image ? $profile_image :'./img/default-avatar.webp';
     $age = calculateAge($date_of_birth);
     $gender = convertGenderToJapanese($gender);
     $school = getSchoolName($school_id);
