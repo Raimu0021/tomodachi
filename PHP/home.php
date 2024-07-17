@@ -14,6 +14,8 @@ $stmt->execute();
 $school_id = $stmt->fetchColumn();
 ?>
 
+<link rel="stylesheet" href="home.css">
+
 <!-- 検索欄 -->
 
 <form action="search.php" method="get" class="mb-4">
@@ -23,38 +25,7 @@ $school_id = $stmt->fetchColumn();
 </form>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#school_name').on('input', function() {
-        let text = $(this).val();
-        if (text === '') {
-            $('#school_predictions').html('');
-            return; // テキストが空の場合はここで処理を終了
-        }
-        console.log(text); // 入力したもの
-        $.get('./common/searchSchool.php', {text: text}, function(data) {
-            let schools = JSON.parse(data);
-            if (schools.length === 0) {
-                $('#school_predictions').html(''); // 結果が空の場合はリンクを表示しない
-                return;
-            }
-            console.log(schools); // API返り値
-            let html = '';
-            for(let key in schools) {
-                if(schools.hasOwnProperty(key)) {
-                    html += '<div><a href="search.php?school_id=' + schools[key].school_id + '">' + schools[key].school_name + '</a></div>';
-                    console.log(schools[key].school_name);
-                }
-            }
-            $('#school_predictions').html(html);
-        });
-    });
-
-    $('form').on('submit', function(event) {
-        event.preventDefault(); // フォームのsubmitを防止
-    });
-});
-</script>
+<script src="../js/search.js"></script>
 <div id="school_predictions">
 </div>
 
@@ -65,7 +36,6 @@ $(document).ready(function() {
 <div class="container">
     <div class="row">
     <?php
-        // $school_id = $loggedInUser ? $loggedInUser['school_id'] : null;
         $sql = "SELECT * FROM users WHERE school_id = :school_id AND user_id != :user_id AND is_private = 0 ORDER BY RAND() LIMIT 8";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
@@ -78,7 +48,7 @@ $(document).ready(function() {
             echo "<h2>あなたと同じ学校</h2>";
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 echo '<div class="col-md-3 mb-4">';
-                renderCard($row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id']);
+                renderCard($row['user_id'], $row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id'], $user_id);
                 echo '</div>';
             }
         }elseif ($loggedInUser != null && $school_id == null) {
@@ -97,13 +67,13 @@ $(document).ready(function() {
     <?php
         if($loggedInUser != null) {
 
-            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :user_id AND is_private = 0";
+            $sql = "SELECT user_id, profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :user_id AND is_private = 0";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
             $stmt->execute();
     
             while($like = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id";
+                $sql = "SELECT user_id, profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id";
                 $stmt2 = $conn->prepare($sql);
                 $stmt2->bindParam(':liked_user_id', $like['liked_user_id'], PDO::PARAM_INT);
                 $stmt2->execute();
@@ -111,7 +81,7 @@ $(document).ready(function() {
                 while($user = $stmt2->fetch(PDO::FETCH_ASSOC)) {
                     echo "<h2>いいね済み</h2>";
                     echo '<div class="col-md-3 mb-4">';
-                    renderCard($user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
+                    renderCard($user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id'], $user_id);
                     echo '</div>';
                 }
             }
@@ -123,12 +93,12 @@ $(document).ready(function() {
 <!-- ランダムユーザー表示 -->
     <?php
         if($loggedInUser != null){
-            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE is_private = 0 AND user_id != :user_id ORDER BY RAND() LIMIT 16";
+            $sql = "SELECT user_id, profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE is_private = 0 AND user_id != :user_id ORDER BY RAND() LIMIT 16";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
             $stmt->execute();
         }else{
-            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE is_private = 0 ORDER BY RAND() LIMIT 16";
+            $sql = "SELECT user_id, profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE is_private = 0 ORDER BY RAND() LIMIT 16";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
         }
@@ -137,12 +107,15 @@ $(document).ready(function() {
 
         while($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
             echo '<div class="col-md-3 mb-4">';
-            renderCard($user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
+            renderCard($user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id'], $user_id);
             echo '</div>';
         }
     ?>
 <!-- ランダムユーザー表示ここまで -->
-        
+      
+<!-- いいね処理 -->
+<script src="../js/likeButtonHandler.js"></script>
+
     <?php
         $conn = null;
     ?>
