@@ -10,5 +10,5 @@ $stmt->execute();
 
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC); // この行を変更
 
-echo json_encode($results);
+//
 ?>
