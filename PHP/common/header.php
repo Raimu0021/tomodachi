@@ -35,7 +35,7 @@
             <li><a href="./date.php"><img src="../CSS/icon_date.png" alt="デート">デート</a></li>
             <li><a href="./chat.php"><img src="../CSS/icon_message.png" alt="メッセージ">メッセージ</a></li>
             <li><a href="./setting.php"><img src="../CSS/icon_setting.png" alt="設定">設定</a></li>
-            <li id="user"><a href="./profile"><img src="<?php echo $user['profile_image']?>" alt=""><?php echo $user['user_name']?></a></li>
+            <li id="user"><a href="./profile_edit.php"><img src="<?php echo $user['profile_image']?>" alt=""><?php echo $user['user_name']?></a></li>
         </ul>
         
     </div>
@@ -53,6 +53,7 @@
             border: solid #dadada 1px;
             background-color: white;
             z-index: 10;
+            overflow-y: scroll;
             /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
             -ms-overflow-style: none;
             /*Firefoxへの対応*/
