@@ -67,13 +67,13 @@ $school_id = $stmt->fetchColumn();
     <?php
         if($loggedInUser != null) {
 
-            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :user_id AND is_private = 0";
+            $sql = "SELECT user_id, profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :user_id AND is_private = 0";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
             $stmt->execute();
     
             while($like = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id";
+                $sql = "SELECT user_id, profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE user_id = :liked_user_id";
                 $stmt2 = $conn->prepare($sql);
                 $stmt2->bindParam(':liked_user_id', $like['liked_user_id'], PDO::PARAM_INT);
                 $stmt2->execute();
@@ -93,12 +93,12 @@ $school_id = $stmt->fetchColumn();
 <!-- ランダムユーザー表示 -->
     <?php
         if($loggedInUser != null){
-            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE is_private = 0 AND user_id != :user_id ORDER BY RAND() LIMIT 16";
+            $sql = "SELECT user_id, profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE is_private = 0 AND user_id != :user_id ORDER BY RAND() LIMIT 16";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $loggedInUser, PDO::PARAM_INT);
             $stmt->execute();
         }else{
-            $sql = "SELECT profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE is_private = 0 ORDER BY RAND() LIMIT 16";
+            $sql = "SELECT user_id, profile_image, user_name, date_of_birth, gender, school_id FROM users WHERE is_private = 0 ORDER BY RAND() LIMIT 16";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
         }
