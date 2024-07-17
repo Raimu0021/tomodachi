@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // セッションの終了
                 session_destroy();
-                header("Location: goodbye.php");
+                header("Location:login-logout.php");
                 exit();
             } else {
                 $error = "パスワードが一致しません。";
@@ -45,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ここでヘッダーファイルをインクルードします
 require './common/header.php';
 ?>
 

@@ -86,6 +86,7 @@ if (!$chat_ids->execute([$user_id])) {
         <form action="" method="post">
         <input type="hidden" name="chat_id" value="<?php echo htmlspecialchars($chat['chat_id'], ENT_QUOTES, 'UTF-8'); ?>">
         <input type="hidden" name="chat_name" value="<?php echo htmlspecialchars($chat_name, ENT_QUOTES, 'UTF-8'); ?>">
+        <input type="hidden" name="participant" value="<?php echo htmlspecialchars($participant['user_id'], ENT_QUOTES, 'UTF-8'); ?>">
         <button type="submit" class="chat">
             <p class="name"><?php echo htmlspecialchars($chat_name, ENT_QUOTES, 'UTF-8'); ?></p>
             <p class="last_message_date">

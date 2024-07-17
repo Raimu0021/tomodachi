@@ -37,7 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
                     $errors['login'] = 'メールアドレスもしくはパスワードが間違っています。';
                 } else {
                     $_SESSION['user_id'] = $user['user_id'];
+                    $sql = "UPDATE users SET online_flg = 1 WHERE user_id = :user_id";
+                    $online = $conn->prepare($sql);
+                    $online->bindValue(':user_id', $user['user_id'], PDO::PARAM_STR);
+                    $online->execute();
                     $_SESSION['loggedin'] = true;
+
                     header('Location: home.php');
                     exit;
                 }
@@ -59,11 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
                     // パスワードをハッシュ化
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-                    $sql = "INSERT INTO users (user_name, email, password) VALUES (:user_name, :email, :password)";
+                    $sql = "INSERT INTO users (user_name, email, password, profile_image) VALUES (:user_name, :email, :password, :profile_image)";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindValue(':user_name', $user_name, PDO::PARAM_STR);
                     $stmt->bindValue(':email', $email, PDO::PARAM_STR);
                     $stmt->bindValue(':password', $hashedPassword, PDO::PARAM_STR);
+                    $stmt->bindValue(':profile_image', '../img/default-avatar.png', PDO::PARAM_STR);
                     $stmt->execute();
 
                     $_SESSION['user_id'] = $conn->lastInsertId();

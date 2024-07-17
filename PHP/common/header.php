@@ -40,7 +40,9 @@
         
     </div>
     <div class="notification" style="display:none;">
-            <?php //require "../tuti.php";?>
+
+            <?php require "notification.php";?>
+
     </div>
     <style>
         .notification {
@@ -51,6 +53,7 @@
             border: solid #dadada 1px;
             background-color: white;
             z-index: 10;
+            overflow-y: scroll;
         }
     </style>
     <script>
