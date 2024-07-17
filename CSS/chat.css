@@ -5,14 +5,14 @@
 .chat_list {
   width: 30%;
   height: 100vh;
-  border: #8e8e8e solid 1px;
+  border-right: #dadada solid 1px;
 }
 
 .title {
   height: 5vh;
   width: 100%;
   font-size: 20px;
-  border: 1px solid #8e8e8e;
+  border-bottom: 1px solid #dadada;
   padding: 10px;
 }
 
@@ -33,6 +33,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .chat .name {
@@ -52,13 +54,6 @@
   margin: 0 auto 0 5px;
 }
 
-.under_line {
-  background-color: #8e8e8e;
-  height: 1px;
-  width: 80%;
-  margin: 0 auto 0 auto;
-}
-
 .chat_area {
   width: 100%;
   height: 100vh;
@@ -66,7 +61,7 @@
 
 .chat_name {
   display: flex;
-  border: #8e8e8e solid 1px;
+  border-bottom: #dadada solid 1px;
   height: 5vh;
   align-items: center;
 }
@@ -88,7 +83,17 @@
 
 .message_area {
   height: 87vh;
+  padding: 0 20px;
   overflow-y: scroll;
+  /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
+  -ms-overflow-style: none;
+  /*Firefoxへの対応*/
+  scrollbar-width: none;
+}
+
+/*Google Chrome、Safariへの対応*/
+.message_area::-webkit-scrollbar {
+  display: none;
 }
 
 .send,
@@ -106,7 +111,6 @@
 .send .message_text {
   border: #cdcdcd solid 1px;
   background-color: white;
-  margin-right: 5px;
 }
 .send .message_at {
   margin: auto 3px 1px auto;
@@ -114,7 +118,6 @@
 
 .receive .message_text {
   background-color: #94c0cf;
-  margin-left: 5px;
 }
 .receive .message_at {
   margin: auto auto 1px 3px;

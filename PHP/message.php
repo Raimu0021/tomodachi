@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
         $stmt = $conn->prepare('INSERT INTO messages (chat_id, sender_id, message, message_at) VALUES (?, ?, ?, NOW())');
 
         if ($stmt->execute([$chat_id, $sender_id, $message])) {
-            // メッセージが正常に挿入された場合の処理
             $participant_query = $conn->prepare('SELECT * FROM participants WHERE chat_id=? AND user_id != ?');
             $participant_query->execute([$chat_id, $sender_id]);
             foreach($participant_query as $participant){
@@ -39,18 +38,20 @@ $messages = $conn->prepare('SELECT * FROM messages WHERE chat_id = ? ORDER BY me
 $messages->execute([$chat_id]);
 ?>
 <script>
-function fetchMessages() {
+function fetchMessages(scrollToBottom = false) {
     const chatId = <?php echo json_encode($chat_id); ?>;
     fetch('fetch_messages.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: 'chat_id=' + chatId
+        body: 'chat_id=' + encodeURIComponent(chatId)
     })
     .then(response => response.json())
     .then(data => {
         const messagesContainer = document.querySelector('.message_area');
+        const shouldScroll = messagesContainer.scrollTop + messagesContainer.clientHeight === messagesContainer.scrollHeight;
+        
         messagesContainer.innerHTML = ''; // 既存のメッセージをクリア
 
         const today = new Date();
@@ -117,20 +118,24 @@ function fetchMessages() {
                 messageWrapperDiv.appendChild(messageAtDiv);
             }
         });
+
+        if (scrollToBottom || shouldScroll) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
     })
     .catch(error => console.error('Error:', error));
 }
 
 // HTMLが完全に読み込まれた後にメッセージを取得
-document.addEventListener('DOMContentLoaded', fetchMessages);
+document.addEventListener('DOMContentLoaded', () => {
+    fetchMessages(true); // ページ読み込み時にスクロールを一番下に
+});
 
-setInterval(fetchMessages, 1000);
-
-fetchMessages();
-
+// setInterval(() => fetchMessages(false), 1000);
 </script>
+
 <div class="chat_name">
-    <p><?php echo $chat_name; ?></p>
+    <p><?php echo htmlspecialchars($chat_name, ENT_QUOTES, 'UTF-8'); ?></p>
     <form action="">
         <button type="submit" name="chat_id" class="close_chat">閉じる</button>
     </form>
