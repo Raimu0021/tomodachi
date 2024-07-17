@@ -53,6 +53,7 @@
             border: solid #dadada 1px;
             background-color: white;
             z-index: 10;
+            overflow-y: scroll;
             /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
             -ms-overflow-style: none;
             /*Firefoxへの対応*/
