@@ -1,125 +1,102 @@
 <?php
-session_start();
-require './common/db-connect.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// ログインしているユーザーのIDを取得
+session_start(); // セッションの開始は出力前に行う
+
+include 'common/db-connect.php';
+
+$message = '';
+
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 } else {
-    header("Location: login.php");
-    exit();
+    $message = "セッションが見つかりません。再度ログインしてください。";
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $input_password = $_POST['password'];
-
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $password = $_POST['password'];
+    
     try {
         // ユーザー情報の取得
-        $stmt = $conn->prepare("SELECT password FROM users WHERE user_id = :user_id"); // user_idに修正
+        $sql = "SELECT password FROM users WHERE user_id = :user_id";
+        $stmt = $conn->prepare($sql);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($result) {
-            $stored_password = $result['password'];
-
-            // パスワードの確認
-            if (password_verify($input_password, $stored_password)) {
-                // アカウントの削除
-                $stmt = $conn->prepare("DELETE FROM users WHERE user_id = :user_id"); // user_idに修正
-                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-                $stmt->execute();
-
+        
+        if ($result && password_verify($password, $result['password'])) {
+            // アカウントの削除
+            $sql = "DELETE FROM users WHERE user_id = :user_id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            
+            if ($stmt->execute()) {
                 // セッションの終了
                 session_destroy();
-                header("Location:login-logout.php");
+                header("Location: login-logout.php");
                 exit();
             } else {
-                $error = "パスワードが一致しません。";
+                $message = "アカウントの削除に失敗しました。";
             }
         } else {
-            $error = "ユーザー情報の取得に失敗しました。";
+            $message = "パスワードが一致しません。";
         }
+        
+        $stmt->closeCursor();
     } catch (PDOException $e) {
         echo 'Error: ' . $e->getMessage();
     }
 }
 
-require './common/header.php';
+$conn = null;
 ?>
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
-    <title>アカウント削除</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-        }
-        h1 {
-            margin-bottom: 1.5rem;
-            color: #333333;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin-bottom: 0.5rem;
-            color: #555555;
-            text-align: left;
-        }
-        input[type="password"] {
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #dddddd;
-            border-radius: 4px;
-        }
-        button {
-            padding: 0.75rem;
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .error {
-            color: red;
-            margin-bottom: 1rem;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../CSS/header.css">
+    <link rel="stylesheet" href="../CSS/mailaddress.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <div class="container">
-        <h1>アカウント削除</h1>
-        <?php if (isset($error)): ?>
-            <p class="error"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
-        <?php endif; ?>
-        <form method="post" action="">
-            <label for="password">パスワード:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">削除</button>
-        </form>
+    <?php
+    require 'common/header.php';
+    ?>
+    <div class="login-field">
+        <div class="login-background">
+            <div class="login-title">
+                <span>アカウント削除</span>
+            </div>
+            <div class="login-form">
+                <?php if (!empty($message)): ?>
+                    <div class="message"><?php echo htmlspecialchars($message); ?></div>
+                <?php endif; ?>
+                <form action="" method="POST">
+                    <div class="field">
+                        <label for="password">パスワード</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="field button-field">
+                        <button class="button button-login" type="submit">削除する</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+    <span class="square square-tl"></span>
+    <span class="square square-tr"></span>
+    <span class="square square-bl"></span>
+    <span class="square square-br"></span>
+    <span class="star star1"></span>
+    <span class="star star2"></span>
 </body>
+
 </html>
+<?php require 'common/footer.php'; ?>

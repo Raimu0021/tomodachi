@@ -2,8 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-session_start();
-require 'common/header.php';
+session_start(); // セッションの開始は出力前に行う
+
 include 'common/db-connect.php';
 
 $message = '';
@@ -13,7 +13,7 @@ if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
     
     // 現在のメールアドレスを取得
-    $sql = "SELECT email FROM users WHERE user_id = :user_id";  // ここで 'user_id' を使用しています
+    $sql = "SELECT email FROM users WHERE user_id = :user_id";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
@@ -58,106 +58,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $conn = null;
 ?>
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background-color: #f8f8f8;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        overflow: hidden;
-    }
+<!DOCTYPE html>
+<html lang="ja">
 
-    .container-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-    }
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../CSS/header.css">
+    <link rel="stylesheet" href="../CSS/mailaddress.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</head>
 
-    .container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        width: 100%;
-        text-align: center;
-    }
-
-    h1 {
-        margin-bottom: 20px;
-        font-size: 24px;
-        color: #333;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-        text-align: left;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: #555;
-    }
-
-    input[type="text"],
-    input[type="email"] {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-
-    button {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        width: 100%;
-    }
-
-    button:hover {
-        background-color: #45a049;
-    }
-
-    .message {
-        margin-bottom: 15px;
-        color: #f00;
-    }
-</style>
-
-<div class="container-wrapper">
-    <div class="container">
-        <h1>メールアドレス変更</h1>
-        <?php if (!empty($message)): ?>
-            <div class="message"><?php echo htmlspecialchars($message); ?></div>
-        <?php endif; ?>
-        <form action="" method="POST">
-            <div class="form-group">
-                <label for="current-email">現在のメールアドレス</label>
-                <input type="text" id="current-email" name="current-email" value="<?php echo htmlspecialchars($current_email ?? '', ENT_QUOTES, 'UTF-8'); ?>" readonly>
+<body>
+    <?php
+    require 'common/header.php';
+    ?>
+    <div class="login-field">
+        <div class="login-background">
+            <div class="login-title">
+                <span>メールアドレス変更</span>
             </div>
-            <div class="form-group">
-                <label for="new-email">新しいメールアドレス</label>
-                <input type="email" id="new-email" name="new-email" required>
+            <div class="login-form">
+                <?php if (!empty($message)): ?>
+                    <div class="message"><?php echo htmlspecialchars($message); ?></div>
+                <?php endif; ?>
+                <form action="" method="POST">
+                    <div class="field">
+                        <label for="current-email">現在のメールアドレス</label>
+                        <input type="text" id="current-email" name="current-email" value="<?php echo htmlspecialchars($current_email ?? '', ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                    </div>
+                    <div class="field">
+                        <label for="new-email">新しいメールアドレス</label>
+                        <input type="email" id="new-email" name="new-email" required>
+                    </div>
+                    <div class="field">
+                        <label for="confirm-email">新しいメールアドレス確認</label>
+                        <input type="email" id="confirm-email" name="confirm-email" required>
+                    </div>
+                    <div class="field button-field">
+                        <button class="button button-login" type="submit">変更する</button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="confirm-email">新しいメールアドレス確認</label>
-                <input type="email" id="confirm-email" name="confirm-email" required>
-            </div>
-            <button type="submit">変更する</button>
-        </form>
+        </div>
     </div>
-</div>
+    <span class="square square-tl"></span>
+    <span class="square square-tr"></span>
+    <span class="square square-bl"></span>
+    <span class="square square-br"></span>
+    <span class="star star1"></span>
+    <span class="star star2"></span>
+</body>
 
-<?php require 'common/footer.php' ?>
+</html>
+<?php require 'common/footer.php'; ?>
