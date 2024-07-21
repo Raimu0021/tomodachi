@@ -9,12 +9,11 @@ html {
     height: 100%; /* 追加: HTML要素の高さを100%に設定 */
     overflow: hidden; /* 変更: 全体のオーバーフローを隠す */
 }
-
+/*#9d56e5, #6f65f9, #4e7eff, #57a5ff, #6dcbff, #9af5ff*/
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: linear-gradient(135deg,  #9d56e5, #6f65f9, #4e7eff, #57a5ff, #6dcbff, #9af5ff);
     background-size: 200% 200%;
     animation: gradientAnimation 15s ease infinite;
     overflow-x: hidden; /* 横スクロールを防止 */
