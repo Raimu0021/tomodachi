@@ -10,7 +10,7 @@ html {
   height: 100%;
   font-family: "Noto Sans JP", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 300;
+  font-weight: 400;
   font-style: normal;
   background-color: #f5f5f5;
 }
@@ -27,6 +27,7 @@ body > *:not(.sidebar) {
   border: solid #dadada 1px;
   background-color: white;
   z-index: 10;
+  transform: translateX(-300px);
   overflow-y: scroll;
   /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
   -ms-overflow-style: none;
@@ -36,4 +37,30 @@ body > *:not(.sidebar) {
 /*Google Chrome、Safariへの対応*/
 .notification::-webkit-scrollbar {
   display: none;
+}
+
+@keyframes show-noti {
+  0% {
+    transform: translateX(-300px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes close-noti {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-300px);
+  }
+}
+
+.show {
+  animation: show-noti ease-in 0.2s forwards;
+}
+
+.close {
+  animation: close-noti linear 0.2s forwards;
 }

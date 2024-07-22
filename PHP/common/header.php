@@ -51,7 +51,7 @@ if(!isset($_SESSION['user_id'])){
         </ul>
         
     </div>
-    <div class="notification" style="display:none;">
+    <div class="notification">
         <?php require "notification.php";?>
     </div>
     <script>
@@ -60,10 +60,12 @@ if(!isset($_SESSION['user_id'])){
             const nLink = document.getElementById("noti");
 
             nLink.addEventListener("click", () => {
-                if (notification.style.display === 'block') {
-                    notification.style.display = 'none';
+                if (notification.classList.contains("show")) {
+                    notification.classList.remove("show");
+                    notification.classList.add("close");
                 } else {
-                    notification.style.display = 'block';
+                    notification.classList.add("show");
+                    notification.classList.remove("close")
                 }
             });
         });
