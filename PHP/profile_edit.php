@@ -29,12 +29,19 @@ if (isset($_SESSION['user_id'])) {
     $profile_gender = htmlspecialchars($profile['gender'] ?? '');
     $profile_date_of_birth = htmlspecialchars($profile['date_of_birth'] ?? '');
     $profile_image = htmlspecialchars($profile['profile_image'] ?? 'default.png');
+    $profile_school_id = $profile['school_id'] ?? '';
+
+    // 学校名の選択肢を取得
+    $stmt = $conn->prepare("SELECT school_id, school_name FROM schools");
+    $stmt->execute();
+    $schools = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name = $_POST['name'];
         $bio = $_POST['bio'] ?? ''; // 空欄の場合は空文字に設定
         $gender = $_POST['gender'];
         $date_of_birth = $_POST['date_of_birth'];
+        $school_id = $_POST['school_name']; // school_id を取得
         $profile_image_path = $profile_image; // デフォルトで現在の画像パスを設定
 
         if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLOAD_ERR_OK) {
@@ -45,14 +52,15 @@ if (isset($_SESSION['user_id'])) {
         }
 
         // プロフィール情報を更新
-        $stmt = $conn->prepare("UPDATE users SET user_name = :name, self_introduction = :bio, gender = :gender, date_of_birth = :date_of_birth, profile_image = :profile_image WHERE user_id = :user_id");
+        $stmt = $conn->prepare("UPDATE users SET user_name = :name, self_introduction = :bio, gender = :gender, date_of_birth = :date_of_birth, profile_image = :profile_image, school_id = :school_id WHERE user_id = :user_id");
         $stmt->execute([
             'user_id' => $user_id,
             'name' => $name,
             'bio' => $bio,
             'gender' => $gender,
             'date_of_birth' => $date_of_birth,
-            'profile_image' => $profile_image_path
+            'profile_image' => $profile_image_path,
+            'school_id' => $school_id
         ]);
 
         header('Location: profile.php');
@@ -106,6 +114,15 @@ if (isset($_SESSION['user_id'])) {
             <div class="form-group">
                 <label for="date_of_birth">生年月日</label>
                 <input type="date" id="date_of_birth" name="date_of_birth" value="<?= $profile_date_of_birth ?>" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="school_name">学校</label>
+                <select id="school_name" name="school_name" class="form-control" required>
+                    <option value="">選択してください</option>
+                    <?php foreach ($schools as $school): ?>
+                        <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $profile_school_id == $school['school_id'] ? 'selected' : '' ?>><?= htmlspecialchars($school['school_name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="form-group">
                 <label for="bio">自己紹介</label>
