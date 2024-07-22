@@ -1,6 +1,6 @@
 <?php 
 require 'common/header.php' ;
-require 'date_card_component.php';
+require 'common/date_card_component.php';
 require './common/db-connect.php'; 
 $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 ?>
@@ -16,7 +16,7 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         //ここまで
 
         // ログインユーザーがデート中の場合、デート評価画面にリダイレクト
-        $stmt = $pdo->prepare("SELECT currently_dating FROM users WHERE user_id = :user_id");
+        $stmt = $conn->prepare("SELECT currently_dating FROM users WHERE user_id = :user_id");
         $stmt->execute(['user_id' => $_SESSION['user_id']]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -34,13 +34,13 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         
             // デート申請を送ってきたユーザーを取得
             $dateRequestsSql = "SELECT u.* FROM users u JOIN dates d ON u.user_id = d.sender_id WHERE d.receiver_id = :loggedInUserId AND d.is_hidden = 0 ORDER BY RAND() LIMIT 8";
-            $stmt = $pdo->prepare($dateRequestsSql);
+            $stmt = $conn->prepare($dateRequestsSql);
             $stmt->execute(['loggedInUserId' => $loggedInUserId]);
             $dateRequestUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
             // いいねを送ってきたユーザーを取得
             $likesSql = "SELECT u.* FROM users u JOIN likes l ON u.user_id = l.user_id WHERE l.liked_user_id = :loggedInUserId ORDER BY RAND() LIMIT 8";
-            $stmt = $pdo->prepare($likesSql);
+            $stmt = $conn->prepare($likesSql);
             $stmt->execute(['loggedInUserId' => $loggedInUserId]);
             $usersWhoLikedLoggedInUser = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
@@ -51,6 +51,7 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             $stmt->execute();
             $userIdsLikedByLoggedInUser = $stmt->fetchAll(PDO::FETCH_ASSOC); // いいねしたユーザーのIDを取得
         
+            echo "<h2>いいねした人</h2>";
             // 1. ログインユーザーがいいねしたユーザーの詳細を取得
             foreach($userIdsLikedByLoggedInUser as $like) {
                 
@@ -59,8 +60,10 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 $stmt2->bindParam(':liked_user_id', $like['liked_user_id'], PDO::PARAM_INT);
                 $stmt2->execute();
                 
+
+                
                 while($user = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                    echo "<h2>いいねした人</h2>";
+                    
                     echo '<div class="col-md-3 mb-4">';
                     renderDateCard($_SESSION['user_id'], $like['liked_user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
                     echo '</div>';
@@ -68,16 +71,17 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             }
 
             // 2. デート申請を送ってきたユーザーを取得
+            echo "<h2>デート申請を送ってきたユーザー</h2>";
             foreach($dateRequestUsers as $user) {
-                echo "<h2>デート申請を送ってきたユーザー</h2>";
+                
                 echo '<div class="col-md-3 mb-4">';
                 renderDateCard($_SESSION['user_id'], $user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
                 echo '</div>';
             }
 
             // 3. いいねを送ってきたユーザーを取得
+            echo "<h2>いいねを送ってきたユーザー</h2>";
             foreach($usersWhoLikedLoggedInUser as $user) {
-                echo "<h2>いいねを送ってきたユーザー</h2>";
                 echo '<div class="col-md-3 mb-4">';
                 renderDateCard($_SESSION['user_id'], $user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
                 echo '</div>';

@@ -14,7 +14,7 @@ $stmt->execute();
 $school_id = $stmt->fetchColumn();
 ?>
 
-<link rel="stylesheet" href="home.css">
+
 
 <!-- 検索欄 -->
 
@@ -104,7 +104,7 @@ $school_id = $stmt->fetchColumn();
         }
         
         
-        echo '<h2>ランダム表示<h2>';
+        echo '<h2>ランダム表示</h2>';
         while($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
             echo '<div class="col-md-3 mb-4">';
             renderCard($user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id'], $user_id);
