@@ -36,7 +36,7 @@ body {
     text-align: center;
     z-index: 10;
     position: relative;
-    margin: 50px auto; /* 中央に配置 */
+    margin: auto;
 }
 
 .profile-header {
@@ -44,10 +44,10 @@ body {
 }
 
 .profile-header img {
-    width: 200px; /* 画像の幅を大きく */
-    height: 200px; /* 画像の高さを大きく */
-    border-radius: 50%; /* 丸くするための設定 */
-    object-fit: cover; /* 画像が枠に収まるように調整 */
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .profile-info h1 {
@@ -88,6 +88,88 @@ body {
 .edit-profile-button:hover,
 .logout-button:hover {
     background-color: #2980b9;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+    border-right: 1px solid #dadada;
+    font-weight: 500;
+    z-index: 50;
+}
+
+.logo {
+    display: block;
+    margin-inline: 10px auto;
+    width: 94px;
+    height: 90px;
+}
+
+.sidebar ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    height: 100%;
+    padding: 0;
+    margin: 20px 0;
+}
+
+#profile {
+    margin-block: auto 0;
+}
+
+.sidebar li {
+    height: 50px;
+}
+
+.sidebar ul li a {
+    display: block;
+    color: black;
+    text-decoration: none;
+    height: 100%;
+    padding: 10px 20px;
+}
+
+.sidebar ul li img {
+    height: 90%;
+    margin-right: 10px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #dadada;
+}
+
+#user {
+    margin-block: auto 0;
+    height: auto;
+}
+
+#user img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px; /* 通知画面の幅 */
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    display: none; /* 初期状態は非表示 */
+    justify-content: center;
+    align-items: center;
 }
 
 .square {
