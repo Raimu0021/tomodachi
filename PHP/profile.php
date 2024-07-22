@@ -92,7 +92,9 @@ $profileBio = isset($profile['self_introduction']) && !empty($profile['self_intr
                         </div>
                         <div class="profile-actions">
                             <a href="profile_edit.php" class="edit-profile-button">プロフィールを編集</a>
-                            <a href="logout.php" class="logout-button">ログアウトする</a>
+                            <form action="login-logout.php" method="POST" style="display:inline;">
+                                <button type="submit" class="logout-button">ログアウトする</button>
+                            </form>
                         </div>
                     </div>
                 <?php endif; ?>
