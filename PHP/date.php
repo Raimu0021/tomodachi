@@ -104,7 +104,7 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId: userId, partnerId: partnerId }),
+            body: JSON.stringify({ sender_id: sender_id, receiver_id: receiver_id }),
         })
         .then(response => response.json())
         .then(data => {
