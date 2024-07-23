@@ -99,7 +99,7 @@ $loggedInUser = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
     <script>
     function requestDate(sender_id, receiver_id) {
         // AJAXリクエストをバックエンドに送信
-        fetch('/path/to/date_request_handler.php', {
+        fetch('handler/date_request_handler.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
