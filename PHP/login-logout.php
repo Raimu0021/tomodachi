@@ -4,6 +4,11 @@ include 'common/db-connect.php';
 
 $errors = []; // エラーメッセージを格納する配列
 
+if (isset($_SESSION['noLogin'])) {
+    $errors['noLogin'] = $_SESSION['noLogin'];
+    SESSION_destroy();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
     $formType = $_POST['form_type'];
     $email = $_POST['email'];
@@ -82,6 +87,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
             }
         }
     }
+}
+//ログアウト処理
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])){
+    $user_id = $_SESSION["user_id"];
+    $stmt = $conn->prepare("UPDATE users SET online_flg=0 WHERE user_id = :user_id");
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    SESSION_destroy();
+    $errors['logout'] = 'ログアウトしました';
 }
 ?>
 

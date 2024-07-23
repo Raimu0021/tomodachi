@@ -3,6 +3,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 session_start();
+if(!isset($_SESSION['user_id'])){
+    header('Location: login-logout.php');
+    $_SESSION['noLogin'] = "ログインしてください";
+    exit;
+  }
 
 include 'common/db-connect.php';
 
@@ -93,7 +98,7 @@ $profileBio = isset($profile['self_introduction']) && !empty($profile['self_intr
                         <div class="profile-actions">
                             <a href="profile_edit.php" class="edit-profile-button">プロフィールを編集</a>
                             <form action="login-logout.php" method="POST" style="display:inline;">
-                                <button type="submit" class="logout-button">ログアウトする</button>
+                                <button type="submit" class="logout-button" name="logout">ログアウトする</button>
                             </form>
                         </div>
                     </div>
