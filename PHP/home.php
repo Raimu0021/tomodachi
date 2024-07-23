@@ -77,7 +77,7 @@ $(document).ready(function() {
         if($school_id != null && $stmt->rowCount() > 0){    
             echo "<h2>あなたと同じ学校</h2>";
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                echo '<div class="col-md-3 mb-4">';
+                echo '<div class="user_card">';
                 renderCard($row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id']);
                 echo '</div>';
             }
@@ -110,7 +110,7 @@ $(document).ready(function() {
                 
                 while($user = $stmt2->fetch(PDO::FETCH_ASSOC)) {
                     echo "<h2>いいね済み</h2>";
-                    echo '<div class="col-md-3 mb-4">';
+                    echo '<div class="user_card">';
                     renderCard($user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
                     echo '</div>';
                 }
@@ -136,7 +136,7 @@ $(document).ready(function() {
         
 
         while($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo '<div class="col-md-3 mb-4">';
+            echo '<div class="user_card">';
             renderCard($user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id']);
             echo '</div>';
         }
