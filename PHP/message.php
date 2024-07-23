@@ -137,13 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="chat_name">
     <p><?php echo htmlspecialchars($chat_name, ENT_QUOTES, 'UTF-8'); ?></p>
     <form action="">
-        <button type="submit" name="chat_id" class="close_chat">閉じる</button>
+        <button type="submit" name="chat_id">閉じる</button>
     </form>
 </div>
 <div class="message_area">
     <!-- JavaScriptによって動的にメッセージが挿入されます -->
 </div>
-<form action="" method="post">
+<form action="" method="post" class ="send_form">
     <input type="hidden" name="chat_id" value="<?php echo htmlspecialchars($chat_id, ENT_QUOTES, 'UTF-8'); ?>">
     <input type="hidden" name="sender_id" value="<?php echo htmlspecialchars($user_id, ENT_QUOTES, 'UTF-8'); ?>">
     <input type="hidden" name="chat_name" value="<?php echo htmlspecialchars($chat_name, ENT_QUOTES, 'UTF-8'); ?>">

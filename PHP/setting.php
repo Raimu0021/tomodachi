@@ -1,22 +1,38 @@
+<?php
+session_start();
+require 'common/header.php';
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>設定ページ</title>
+    <title>Main Page</title>
     <link rel="stylesheet" href="../CSS/setting.css">
 </head>
 <body>
-    <div class="container">
-        <form action="mailaddress.php" method="get">
-            <button type="submit">メールアドレス変更</button>
-        </form>
-        <form action="password.php" method="get">
-            <button type="submit">パスワード変更</button>
-        </form>
-        <form action="Account_deletion.php" method="get">
-            <button type="submit">アカウント削除</button>
-        </form>
-    </div>
+<div class="main-container">
+  <a href="mailaddress.php" class="button">
+    <div class="button__line"></div>
+    <div class="button__line"></div>
+    <span class="button__text">メールアドレス変更</span>
+    <div class="button__drow1"></div>
+    <div class="button__drow2"></div>
+  </a>
+  <a href="password.php" class="button">
+    <div class="button__line"></div>
+    <div class="button__line"></div>
+    <span class="button__text">パスワード変更</span>
+    <div class="button__drow1"></div>
+    <div class="button__drow2"></div>
+  </a>
+  <a href="Account_deletion.php" class="button">
+    <div class="button__line"></div>
+    <div class="button__line"></div>
+    <span class="button__text">アカウント削除</span>
+    <div class="button__drow1"></div>
+    <div class="button__drow2"></div>
+  </a>
+</div>
 </body>
 </html>

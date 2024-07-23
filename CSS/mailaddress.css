@@ -1,0 +1,229 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* 追加: ボックスのサイズを正確に計算する */
+}
+
+html {
+    font-family: "Quicksand";
+    height: 100%; /* 追加: HTML要素の高さを100%に設定 */
+    overflow: hidden; /* 変更: 全体のオーバーフローを隠す */
+}
+/*#9d56e5, #6f65f9, #4e7eff, #57a5ff, #6dcbff, #9af5ff*/
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-size: 200% 200%;
+    animation: gradientAnimation 15s ease infinite;
+    overflow-x: hidden; /* 横スクロールを防止 */
+    height: 100%; /* 追加: Body要素の高さを100%に設定 */
+}
+
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.login-field {
+    flex: 1; /* 追加: Flex要素として高さを調整 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 300px; /* サイドバーの幅を考慮 */
+    overflow: hidden; /* 追加: 横スクロールを防止 */
+}
+
+.login-background {
+    background: #fff;
+    min-height: 600px;
+    min-width: 400px;
+    max-width: 80vw; /* 最大幅を設定 */
+    background: linear-gradient(to right bottom,
+            rgba(255, 255, 255, 0.2),
+            rgba(255, 255, 255, 0.1));
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    z-index: 5;
+    display: flex;
+    flex-flow: column;
+    box-shadow: 0 0 5px 0 rgba(22, 22, 22, 0.1);
+    overflow: hidden; /* 追加: 横スクロールを防止 */
+}
+
+.message {
+    margin-top: 20px; /* タイトルの下に表示 */
+    background: #ff7d8b;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.login-title {
+    position: relative;
+    color: #000000;
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 5px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 5px solid rgba(255, 255, 255, 0.1);
+}
+
+.login-title span {
+    font-size: 30px;
+    letter-spacing: 3px;
+}
+
+.login-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    flex-grow: 1;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    flex-direction: column;
+    padding-bottom: 20px; /* 追加: 下部に余白を追加 */
+}
+
+.login-form .field {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.login-form .field label {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 5px;
+    letter-spacing: 2px;
+    color: #000000;
+}
+
+.login-form .field input {
+    font-family: Quicksand;
+    border: 0px;
+    padding: 20px 60px;
+    border-radius: 10px;
+    outline: none;
+    text-align: center;
+    box-shadow: 0 2px 5px 0 rgba(50, 50, 50, 0.2);
+    background: linear-gradient(to right bottom,
+            rgba(255, 255, 255, 0.8),
+            rgba(255, 255, 255, 0.7));
+    backdrop-filter: blur(10px);
+    color: #111;
+    font-size: 16px;
+}
+
+::placeholder {
+    color: #666;
+    letter-spacing: 2px;
+}
+
+.login-field .button-field {
+    display: flex;
+    flex-flow: column;
+}
+
+.login-form .field button {
+    font-family: Quicksand;
+    flex-grow: 1;
+    border: 0px;
+    padding: 15px 50px;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    margin: 10px;
+    transition: 1s;
+    box-shadow: 0 2px 5px 0 rgba(50, 50, 50, 0.2);
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.login-form .field button:hover {
+    transform: translateY(-3px);
+    transition: 1s;
+}
+
+.login-form .button-login {
+    background: linear-gradient(to right bottom,
+    rgb(223, 55, 153),
+    rgb(202, 44, 128));
+    color: #fff;
+}
+
+.square {
+    height: 100vh;
+    width: 50vw;
+    display: table;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+}
+
+.square.square-tl {
+    top: -80%;
+    left: 30%;
+    animation: bounce 6s infinite ease-in-out;
+    background: rgb(34, 34, 34, 0.1);
+    z-index: 50;
+}
+
+.square.square-tr {
+    top: 0%;
+    right: -30%;
+    animation: bounce 5s infinite ease-in-out;
+}
+
+.square.square-bl {
+    bottom: -70%;
+    left: 30%;
+    animation: bounce 4s infinite ease-in-out;
+}
+
+.square.square-br {
+    bottom: 0%;
+    right: -40%;
+    animation: bounce 3s infinite ease-in-out;
+    background: rgb(34, 34, 34, 0.1);
+}
+
+@keyframes bounce {
+    0% {transform: translateY(0px) rotate(45deg)}
+    50% {
+        transform: translateY(20px) rotate(45deg); border-radius: 50px;
+    }
+    100% {transform: translateY(0px) rotate(45deg)}
+}
+
+.star {
+    height: 50px;
+    width: 50px;
+    display: table;
+    position: absolute;
+    box-shadow: 0 0 5px 0 rgba(34, 34, 34, 0.5);
+    transition: 0.5s;
+}
+
+.star1 {
+    bottom: -10%;
+    left: 10%;
+    transform: rotate(-30deg);
+    animation: sweep 4s infinite;
+    background: rgba(34, 34, 34, 0.5);
+}
+
+.star2 {
+    bottom: -30%;
+    left: 20%;
+    transform: rotate(-30deg);
+    animation: sweep 3s infinite;
+    background: rgb(255, 255, 255, 0.5);
+}
+
+@keyframes sweep {
+    100% {bottom: 120%; left: 120%; transform: rotate(360deg);}
+}

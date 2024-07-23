@@ -1,156 +1,154 @@
 <?php
-require 'common/db-connect.php';
-require 'common/header.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// ユーザーIDはセッションやクッキーから取得することを想定（例：1）
-$user_id = 1;
+session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $_POST['name'];
-    $age_gender = $_POST['age_gender'];
-    $school = $_POST['school'];
-    $grade = $_POST['grade'];
-    $bio = $_POST['bio'];
-    $profile_image = null;
+include 'common/db-connect.php';
 
-    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLOAD_ERR_OK) {
-        $profile_image = 'uploads/' . basename($_FILES['profile_image']['name']);
-        move_uploaded_file($_FILES['profile_image']['tmp_name'], $profile_image);
+$message = '';
+$uploadDir = 'uploads/'; // アップロードディレクトリを指定
+$profile = []; // プロフィール情報を初期化
+
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+
+    // アップロードディレクトリが存在しない場合は作成
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
     }
 
-    // プロフィール情報を更新または挿入
-    $stmt = $conn->prepare("INSERT INTO profiles (user_id, name, age_gender, school, grade, bio, profile_image) 
-                           VALUES (:user_id, :name, :age_gender, :school, :grade, :bio, :profile_image)
-                           ON DUPLICATE KEY UPDATE 
-                           name = VALUES(name), age_gender = VALUES(age_gender), school = VALUES(school),
-                           grade = VALUES(grade), bio = VALUES(bio), profile_image = VALUES(profile_image)");
-    $stmt->execute([
-        'user_id' => $user_id,
-        'name' => $name,
-        'age_gender' => $age_gender,
-        'school' => $school,
-        'grade' => $grade,
-        'bio' => $bio,
-        'profile_image' => $profile_image
-    ]);
+    // 現在のプロフィール情報を取得
+    $stmt = $conn->prepare("SELECT * FROM users WHERE user_id = :user_id");
+    $stmt->execute(['user_id' => $user_id]);
+    $profile = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    header('Location: profile.php');
-    exit;
+    // Null値をデフォルト値に置き換え
+    $profile_name = htmlspecialchars($profile['user_name'] ?? '');
+    $profile_bio = htmlspecialchars($profile['self_introduction'] ?? '');
+    $profile_gender = htmlspecialchars($profile['gender'] ?? '');
+    $profile_date_of_birth = htmlspecialchars($profile['date_of_birth'] ?? '');
+    $profile_image = htmlspecialchars($profile['profile_image'] ?? 'default.png');
+    $profile_school_id = $profile['school_id'] ?? '';
+
+    // 学校名の選択肢を取得
+    $stmt = $conn->prepare("SELECT school_id, school_name FROM schools");
+    $stmt->execute();
+    $schools = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $name = $_POST['name'];
+        $bio = $_POST['bio'] ?? ''; // 空欄の場合は空文字に設定
+        $gender = $_POST['gender'];
+        $date_of_birth = $_POST['date_of_birth'];
+        $school_id = $_POST['school_name']; // school_id を取得
+        $profile_image_path = $profile_image; // デフォルトで現在の画像パスを設定
+
+        if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLOAD_ERR_OK) {
+            $profile_image_path = $uploadDir . basename($_FILES['profile_image']['name']);
+            if (!move_uploaded_file($_FILES['profile_image']['tmp_name'], $profile_image_path)) {
+                $message = '画像のアップロードに失敗しました。';
+            }
+        }
+
+        // プロフィール情報を更新
+        $stmt = $conn->prepare("UPDATE users SET user_name = :name, self_introduction = :bio, gender = :gender, date_of_birth = :date_of_birth, profile_image = :profile_image, school_id = :school_id WHERE user_id = :user_id");
+        $stmt->execute([
+            'user_id' => $user_id,
+            'name' => $name,
+            'bio' => $bio,
+            'gender' => $gender,
+            'date_of_birth' => $date_of_birth,
+            'profile_image' => $profile_image_path,
+            'school_id' => $school_id
+        ]);
+
+        header('Location: profile.php');
+        exit;
+    }
+} else {
+    $message = "セッションが見つかりません。再度ログインしてください。";
 }
-
-// 現在のプロフィール情報を取得
-$stmt = $conn->prepare("SELECT * FROM users WHERE user_id = :user_id");
-$stmt->execute(['user_id' => $user_id]);
-$profile = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Null値をデフォルト値に置き換え
-$profile_name = htmlspecialchars($profile['name'] ?? '');
-$profile_age_gender = htmlspecialchars($profile['age_gender'] ?? '');
-$profile_school = htmlspecialchars($profile['school'] ?? '');
-$profile_grade = htmlspecialchars($profile['grade'] ?? '');
-$profile_bio = htmlspecialchars($profile['bio'] ?? '');
 ?>
 
-<div class="container">
-    <form id="profileForm" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="profile_image">プロフィール画像</label>
-            <input type="file" id="profile_image" name="profile_image">
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../CSS/header.css">
+    <link rel="stylesheet" href="../CSS/profile_edit.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <?php
+    require 'common/header.php';
+    ?>
+    <div class="container">
+        <h2>プロフィール編集</h2>
+        <?php if (!empty($message)): ?>
+            <div class="alert alert-danger"><?php echo htmlspecialchars($message); ?></div>
+        <?php endif; ?>
+        <form id="profileForm" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="profile_image">プロフィール画像</label>
+                <input type="file" id="profile_image" name="profile_image" accept="image/*">
+                <img src="<?= $profile_image ?>" alt="プロフィール画像" class="current-image" id="profileImagePreview">
+            </div>
+            <div class="form-group">
+                <label for="name">名前</label>
+                <input type="text" id="name" name="name" value="<?= $profile_name ?>" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">性別</label>
+                <select id="gender" name="gender" class="form-control" required>
+                    <option value="">選択してください</option>
+                    <option value="Male" <?= $profile_gender === 'Male' ? 'selected' : '' ?>>男性</option>
+                    <option value="Female" <?= $profile_gender === 'Female' ? 'selected' : '' ?>>女性</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date_of_birth">生年月日</label>
+                <input type="date" id="date_of_birth" name="date_of_birth" value="<?= $profile_date_of_birth ?>" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="school_name">学校</label>
+                <select id="school_name" name="school_name" class="form-control" required>
+                    <option value="">選択してください</option>
+                    <?php foreach ($schools as $school): ?>
+                        <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $profile_school_id == $school['school_id'] ? 'selected' : '' ?>><?= htmlspecialchars($school['school_name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bio">自己紹介</label>
+                <textarea id="bio" name="bio" class="form-control"><?= $profile_bio ?></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">保存</button>
+            </div>
+        </form>
+        <div class="back-link">
+            <a href="profile.php" class="btn btn-secondary">戻る</a>
         </div>
-        <div class="form-group">
-            <label for="name">名前</label>
-            <input type="text" id="name" name="name" value="<?= $profile_name ?>">
-        </div>
-        <div class="form-group">
-            <label for="age_gender">年齢/性別</label>
-            <input type="text" id="age_gender" name="age_gender" value="<?= $profile_age_gender ?>">
-        </div>
-        <div class="form-group">
-            <label for="school">学校</label>
-            <input type="text" id="school" name="school" value="<?= $profile_school ?>">
-        </div>
-        <div class="form-group">
-            <label for="grade">学年</label>
-            <input type="text" id="grade" name="grade" value="<?= $profile_grade ?>">
-        </div>
-        <div class="form-group">
-            <label for="bio">自己紹介</label>
-            <textarea id="bio" name="bio"><?= $profile_bio ?></textarea>
-        </div>
-        <div class="form-group">
-            <button type="submit">保存</button>
-        </div>
-    </form>
-    <div class="back-link">
-        <a href="profile.php">戻る</a>
     </div>
-</div>
+    <script>
+        document.getElementById('profile_image').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profileImagePreview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
 
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
-
-    #header {
-        background-color: #333;
-        color: white;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .container {
-        padding: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .form-group input, .form-group textarea {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-    }
-
-    .form-group input[type="file"] {
-        padding: 3px;
-    }
-
-    .form-group textarea {
-        height: 100px;
-    }
-
-    .form-group button {
-        background-color: #333;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        cursor: pointer;
-    }
-
-    .form-group button:hover {
-        background-color: #555;
-    }
-
-    .back-link {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .back-link a {
-        text-decoration: none;
-        color: #333;
-        border: 1px solid #333;
-        padding: 5px 10px;
-        border-radius: 5px;
-    }
-</style>
-
+</html>
 <?php require 'common/footer.php'; ?>

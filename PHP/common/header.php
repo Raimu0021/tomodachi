@@ -1,3 +1,15 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if(!isset($_SESSION['user_id'])){
+  header('Location: login-logout.php');
+  $_SESSION['noLogin'] = "ログインしてください";
+  exit;
+}
+?>
+
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -15,6 +27,7 @@
     crossorigin="anonymous"
     ></script>
     
+    <link rel="stylesheet" href="../CSS/style.css">
 </head>
 <body>
     <?php
@@ -35,42 +48,25 @@
             <li><a href="./date.php"><img src="../CSS/icon_date.png" alt="デート">デート</a></li>
             <li><a href="./chat.php"><img src="../CSS/icon_message.png" alt="メッセージ">メッセージ</a></li>
             <li><a href="./setting.php"><img src="../CSS/icon_setting.png" alt="設定">設定</a></li>
-            <li id="user"><a href="./profile"><img src="<?php echo $user['profile_image']?>" alt=""><?php echo $user['user_name']?></a></li>
+            <li id="user"><a href="./profile.php"><img src="<?php echo $user['profile_image']?>" alt=""><?php echo $user['user_name']?></a></li>
         </ul>
         
     </div>
-    <div class="notification" style="display:none;">
-            <?php require "notification.php";?>
+    <div class="notification">
+        <?php require "notification.php";?>
     </div>
-    <style>
-        .notification {
-            position: absolute;
-            width: 250px;
-            height: 100%;
-            top: 0;
-            border: solid #dadada 1px;
-            background-color: white;
-            z-index: 10;
-            /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
-            -ms-overflow-style: none;
-            /*Firefoxへの対応*/
-            scrollbar-width: none;
-        }
-            /*Google Chrome、Safariへの対応*/
-            .notification::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const notification = document.querySelector(".notification");
             const nLink = document.getElementById("noti");
 
             nLink.addEventListener("click", () => {
-                if (notification.style.display === 'block') {
-                    notification.style.display = 'none';
+                if (notification.classList.contains("show")) {
+                    notification.classList.remove("show");
+                    notification.classList.add("close");
                 } else {
-                    notification.style.display = 'block';
+                    notification.classList.add("show");
+                    notification.classList.remove("close")
                 }
             });
         });

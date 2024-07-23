@@ -1,10 +1,5 @@
 <?php 
-session_start();
-
 require 'common/header.php';
-require 'common/db-connect.php';
-
-$user_id = $_SESSION['user_id'];
 
 $chat_ids = $conn->prepare('SELECT * FROM participants WHERE user_id=?');
 if (!$chat_ids->execute([$user_id])) {
@@ -21,28 +16,35 @@ if (!$chat_ids->execute([$user_id])) {
         <p class="title">チャット一覧</p>
         
         <?php
-        foreach ($chat_ids as $id_row) {
-            $chat_id = $id_row['chat_id'];
+        foreach ($chat_ids as $row) {
+            $chat_id = $row['chat_id'];
 
             $join_chat = $conn->prepare('SELECT * FROM chats WHERE chat_id=?');
             if (!$join_chat->execute([$chat_id])) {
                 $errorInfo = $join_chat->errorInfo();
                 echo "Error in join_chat query: " . $errorInfo[2];
-                continue;
             }
             $chat = $join_chat->fetch(PDO::FETCH_ASSOC);
 
             if (!$chat) {
                 echo "Chat not found for chat_id: $chat_id";
-                continue; // チャットが見つからない場合は次のループへ
             }
 
-            $last_message_query = $conn->prepare('SELECT *, YEAR(message_at) AS year, MONTH(message_at) AS month, DAY(message_at) AS day, HOUR(message_at) AS hour, MINUTE(message_at) AS minute, SECOND(message_at) AS second FROM messages WHERE chat_id=? ORDER BY message_id DESC LIMIT 1');
+            $last_message_query = $conn->prepare('SELECT *,
+                                                 YEAR(message_at) AS year,
+                                                 MONTH(message_at) AS month, 
+                                                 DAY(message_at) AS day, 
+                                                 HOUR(message_at) AS hour, 
+                                                 MINUTE(message_at) AS minute, 
+                                                 SECOND(message_at) AS second 
+                                                 FROM messages WHERE chat_id=? 
+                                                 ORDER BY message_id DESC LIMIT 1');
+
             if (!$last_message_query->execute([$chat_id])) {
                 $errorInfo = $last_message_query->errorInfo();
                 echo "Error in last_message_query query: " . $errorInfo[2];
-                continue;
             }
+
             $last_message = $last_message_query->fetch(PDO::FETCH_ASSOC);
 
             if (!$last_message) {
@@ -56,26 +58,22 @@ if (!$chat_ids->execute([$user_id])) {
                 if (!$participant_query->execute([$chat_id, $user_id])) {
                     $errorInfo = $participant_query->errorInfo();
                     echo "Error in participant_query query: " . $errorInfo[2];
-                    continue;
                 }
                 $participant = $participant_query->fetch(PDO::FETCH_ASSOC);
 
                 if (!$participant) {
                     echo "Participant not found for chat_id: $chat_id";
-                    continue; // 参加者が見つからない場合は次のループへ
                 }
 
                 $user_sql = $conn->prepare('SELECT * FROM users WHERE user_id=?');
                 if (!$user_sql->execute([$participant['user_id']])) {
                     $errorInfo = $user_sql->errorInfo();
                     echo "Error in user_sql query: " . $errorInfo[2];
-                    continue;
-                }
+                                    }
                 $partner_name = $user_sql->fetch(PDO::FETCH_ASSOC);
 
                 if (!$partner_name) {
                     echo "Partner not found for user_id: " . $participant['user_id'];
-                    continue; // ユーザーが見つからない場合は次のループへ
                 }
 
                 $chat_name = $partner_name['user_name'];

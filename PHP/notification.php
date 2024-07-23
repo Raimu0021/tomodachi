@@ -49,14 +49,25 @@ foreach ($notifications as $no) {
     .noti_title {
         width: 100%;
         border-bottom: 1px #dadada solid;
+        padding: 10px
     }
     .noti_text {
         width: 100%;
         height: 7vh;
-        display: flex;
-        flex-wrap: wrap;
+        padding: 10px;
+        margin: 10px auto 5px 5px;
     }
     .noti_text a {
         text-decoration: none;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .noti_text a p {
+        margin: 0;
+        
+    }
+
+    .noti_text .date {
+        margin: 0 auto 0 15px;
     }
 </style>
