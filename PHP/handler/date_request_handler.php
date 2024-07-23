@@ -22,17 +22,36 @@ if (count($result) == 0) {
     $insertStmt = $conn->prepare("INSERT INTO dates (sender_id, receiver_id, is_hidden) VALUES (:sender_id, :receiver_id, 0)");
     $insertStmt->execute([':sender_id' => $sender_id, ':receiver_id' => $receiver_id]);
 } else {
-    // ペアが存在するがis_hiddenが1の場合、is_hiddenを0に更新
+    
     $row = $result[0];
     if ($row['is_hidden'] == 1) {
+        // ペアが存在するがis_hiddenが1の場合、is_hiddenを0に更新
         $updateStmt = $conn->prepare("UPDATE dates SET is_hidden = 0 WHERE date_id = :date_id");
         $updateStmt->execute([':date_id' => $row['date_id']]);
+    }else{
+        //  is_hidden = 0の場合にそれぞれのユーザーのcurrently_datingを1に更新
+        $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :sender_id");
+        $updateDatingStmt->execute([':sender_id' => $sender_id]);
+        $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :receiver_id");
+        $updateDatingStmt->execute([':receiver_id' => $receiver_id]);
     }
 }
 
-// 2. receiver_idに自分のIDがある場合、currently_datingを1に更新
-$updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :sender_id");
-$updateDatingStmt->execute([':sender_id' => $sender_id]);
+// 状態
+// ・ペアが存在しない or is_hidden = 1
+// デート要請がない
+
+// ・is_hidden = 0
+// デート要請がある
+
+
+// 処理
+// ・デート要請がない場合
+// is_hidden = 0にする
+
+// ・デート要請がある場合
+// それぞれのユーザーのcurrently_datingを1にする
+
 
 echo json_encode(['message' => 'デートリクエストの処理が完了しました。']);
 ?>
