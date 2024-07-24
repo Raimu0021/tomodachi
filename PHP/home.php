@@ -17,8 +17,8 @@ $school_id = $stmt->fetchColumn();
 
 
 <!-- 検索欄 -->
-
-<form action="search.php" method="get" class="mb-4">
+<div class="contant">
+<form action="search.php" method="get" class="mb-4 search">
     <div class="input-group">
         <input type="text" name="school_name" id="school_name" class="form-control" placeholder="学校名を入力">
     </div>
@@ -32,9 +32,6 @@ $school_id = $stmt->fetchColumn();
 <!-- 検索欄ここまで-->
 
 <!-- ユーザー表示 -->
-
-<div class="content">
-    <div class="row">
     <?php
         $sql = "SELECT * FROM users WHERE school_id = :school_id AND user_id != :user_id AND is_private = 0 ORDER BY RAND() LIMIT 8";
         $stmt = $conn->prepare($sql);
@@ -46,11 +43,11 @@ $school_id = $stmt->fetchColumn();
         // school_idがnullなら同じ学校の生徒は表示しない
         if($school_id != null && $stmt->rowCount() > 0){    
             echo "<h2>あなたと同じ学校</h2>";
+            echo '<div class="user_cards">';
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                echo '<div class="user_card">';
                 renderCard($row['user_id'], $row['profile_image'], $row['user_name'], $row['date_of_birth'], $row['gender'], $row['school_id'], $user_id);
-                echo '</div>';
             }
+            echo '</div>';
         }elseif ($loggedInUser != null && $school_id == null) {
             echo "<h2>あなたと同じ学校</h2>";
             echo "<p>学校を登録して生徒を探しましょう！</p>";
@@ -77,13 +74,12 @@ $school_id = $stmt->fetchColumn();
                 $stmt2 = $conn->prepare($sql);
                 $stmt2->bindParam(':liked_user_id', $like['liked_user_id'], PDO::PARAM_INT);
                 $stmt2->execute();
-                
+                echo "<h2>いいね済み</h2>";
+                echo '<div class="user_cards">';
                 while($user = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                    echo "<h2>いいね済み</h2>";
-                    echo '<div class="user_card">';
-                    renderCard($user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id'], $user_id);
-                    echo '</div>';
+                    renderCard($user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id'], $user_id);    
                 }
+                echo '</div>';
             }
         }
     ?>
@@ -105,11 +101,11 @@ $school_id = $stmt->fetchColumn();
         
         
         echo '<h2>ランダム表示</h2>';
+        echo '<div class="user_cards">';
         while($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo '<div class="user_card">';
             renderCard($user['user_id'], $user['profile_image'], $user['user_name'], $user['date_of_birth'], $user['gender'], $user['school_id'], $user_id);
-            echo '</div>';
         }
+        echo '</div>';
     ?>
 <!-- ランダムユーザー表示ここまで -->
       
@@ -119,7 +115,66 @@ $school_id = $stmt->fetchColumn();
     <?php
         $conn = null;
     ?>
-    </div>
 </div>
-
+<style>
+    .contant{
+        height: 100vh;
+        padding: 15px 20px;
+        overflow: scroll;
+      /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
+        -ms-overflow-style: none;
+        /*Firefoxへの対応*/
+        scrollbar-width: none;
+    }
+        /*Google Chrome、Safariへの対応*/
+    .message_area::-webkit-scrollbar {
+        display: none;
+    }
+    .content .search {
+        width: 80%;
+        margin: 10px auto 0 auto;
+    }
+    .user_cards {
+        display: flex;
+        padding: 10px;
+        overflow-X: scrol;
+        margin-bottom: 30px;
+    }
+    .user_card {
+        margin-left: 20px;
+        width: 200px;
+        height: 300px;
+        border: 1px solid #dadada;
+        border-radius: 5px;
+        background-color: white;
+        text-align: center;
+    }
+    .user_card img {
+        border-radius: 50%;
+        height:100px;
+        width: 100px;
+        object-fit: cover;
+        margin: 15px auto 0 auto;
+    }
+    .card-body {
+        text-align: right;
+        font-weight: 400px;
+        padding: 20px;
+    }
+    .card-body .like-btn {
+        background: white;
+        border: none;
+        color: #e62748;
+        width: 100%;
+        text-align: right;
+    }
+    .card-body .user_name {
+        font-size: 23px;
+        font-weight: 600;
+        text-align: center;
+    }
+    .card-body .school {
+        font-size: 13px;
+    }
+</style>
 <?php require './common/footer.php'; ?>

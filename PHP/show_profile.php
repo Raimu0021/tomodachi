@@ -2,19 +2,13 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-session_start();
-if(!isset($_SESSION['user_id'])){
-    header('Location: login-logout.php');
-    $_SESSION['noLogin'] = "ログインしてください";
-    exit;
-  }
 require 'common/header.php';
 include 'common/db-connect.php';
 
 $message = '';
 
 if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
+    $user_id = $_POST['user_id'];
     
     $stmt = $conn->prepare("SELECT * FROM users WHERE user_id = :user_id");
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
@@ -58,7 +52,7 @@ $profileBio = isset($profile['self_introduction']) && !empty($profile['self_intr
 ?>
 
     <link rel="stylesheet" href="../CSS/profile.css">
-    <div class="contant">
+    <div class="content">
             <div class="login-form">
                 <?php if (!empty($message)): ?>
                     <div class="message"><?php echo htmlspecialchars($message); ?></div>
