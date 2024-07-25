@@ -33,10 +33,13 @@ $result = $stmt->fetchAll();
         $row = $result[0];
         if($row['is_pending'] == 1){
             //  is_pending = 1の場合にそれぞれのユーザーのcurrently_datingを1に更新
+            // is_pending = 0に変更
             $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :sender_id");
             $updateDatingStmt->execute([':sender_id' => $sender_id]);
             $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :receiver_id");
             $updateDatingStmt->execute([':receiver_id' => $receiver_id]);
+            $updateDatingStmt = $conn->prepare("UPDATE dates SET is_pending = 0 WHERE date_id = :date_id");
+            $updateDatingStmt->execute([':date_id' => $row['date_id']]);
         }else{
             //　どれにも当てはまらない場合、is_pending = 1に設定する
             $updateDatingStmt = $conn->prepare("UPDATE dates SET is_pending = 1 WHERE date_id = :date_id");
