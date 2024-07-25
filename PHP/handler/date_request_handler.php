@@ -17,30 +17,32 @@ $stmt = $conn->prepare("SELECT * FROM dates WHERE (sender_id = :sender_id AND re
 $stmt->execute([':sender_id' => $sender_id, ':receiver_id' => $receiver_id]);
 $result = $stmt->fetchAll();
 
-if (count($result) == 0) {
-    // ペアが存在しない場合、新規登録
-    $insertStmt = $conn->prepare("INSERT INTO dates (sender_id, receiver_id, is_hidden, is_pending) VALUES (:sender_id, :receiver_id, 0, 1)");
-    $insertStmt->execute([':sender_id' => $sender_id, ':receiver_id' => $receiver_id]);
-} else {
-    
-    $row = $result[0];
-    if ($row['is_hidden'] == 1) {
-        // ペアが存在するがis_hiddenが1の場合、is_hiddenを0に更新、is_pending = 1に設定する
-        $updateDatingStmt = $conn->prepare("UPDATE dates SET is_hidden = 0, is_pending = 1 WHERE date_id = :date_id");
-        $updateDatingStmt->execute([':date_id' => $row['date_id']]);
-    }else if($row['is_pending'] == 1){
-        //  is_pending = 1の場合にそれぞれのユーザーのcurrently_datingを1に更新
-        $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :sender_id");
-        $updateDatingStmt->execute([':sender_id' => $sender_id]);
-        $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :receiver_id");
-        $updateDatingStmt->execute([':receiver_id' => $receiver_id]);
-    }else{
-        //　どれにも当てはまらない場合、is_pending = 1に設定する
-        $updateDatingStmt = $conn->prepare("UPDATE dates SET is_pending = 1 WHERE date_id = :date_id");
-        $updateDatingStmt->execute([':date_id' => $row['date_id']]);
-    }
-}
+    $datingCheckStmt = $conn->prepare("SELECT user_id FROM users WHERE (user_id = :sender_id OR user_id = :receiver_id) AND currently_dating = 1");
+    $datingCheckStmt->execute(['sender_id' => $sender_id, ':receiver_id' => $receiver_id]);
+    $datingCheckResult = $datingCheckStmt->fetchAll();
 
+    if(count($datingCheckResult) > 0){
+        //どちらか一方がすでにデート中の場合、エラーメッセージを出力
+        echo json_encode(['error' => 'すでにデート中のユーザーがいます。']);
+        exit;
+    }else if (count($result) == 0) {
+        // ペアが存在しない場合、新規登録
+        $insertStmt = $conn->prepare("INSERT INTO dates (sender_id, receiver_id, is_hidden, is_pending) VALUES (:sender_id, :receiver_id, 0, 1)");
+        $insertStmt->execute([':sender_id' => $sender_id, ':receiver_id' => $receiver_id]);
+    }else{
+        $row = $result[0];
+        if($row['is_pending'] == 1){
+            //  is_pending = 1の場合にそれぞれのユーザーのcurrently_datingを1に更新
+            $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :sender_id");
+            $updateDatingStmt->execute([':sender_id' => $sender_id]);
+            $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :receiver_id");
+            $updateDatingStmt->execute([':receiver_id' => $receiver_id]);
+        }else{
+            //　どれにも当てはまらない場合、is_pending = 1に設定する
+            $updateDatingStmt = $conn->prepare("UPDATE dates SET is_pending = 1 WHERE date_id = :date_id");
+            $updateDatingStmt->execute([':date_id' => $row['date_id']]);
+        }
+    }
 
 echo json_encode(['message' => 'デートリクエストの処理が完了しました。']);
 ?>
