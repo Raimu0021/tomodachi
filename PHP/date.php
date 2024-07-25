@@ -34,13 +34,13 @@ $hasDateRequest = false;
             $loggedInUserId = $_SESSION['user_id'];
         
             // デート申請を送ってきたユーザーを取得
-            $dateRequestsSql = "SELECT u.* FROM users u JOIN dates d ON u.user_id = d.sender_id WHERE d.receiver_id = :loggedInUserId AND d.is_hidden = 0 AND u.currently_dating = 0 ORDER BY RAND() LIMIT 8";
+            $dateRequestsSql = "SELECT u.* FROM users u JOIN dates d ON u.user_id = d.sender_id WHERE d.receiver_id = :loggedInUserId AND u.currently_dating = 0 AND u.is_private = 0 ORDER BY RAND() LIMIT 8";
             $stmt = $conn->prepare($dateRequestsSql);
             $stmt->execute(['loggedInUserId' => $loggedInUserId]);
             $dateRequestUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
             // いいねを送ってきたユーザーを取得
-            $likesSql = "SELECT u.* FROM users u JOIN likes l ON u.user_id = l.user_id WHERE l.liked_user_id = :loggedInUserId AND u.currently_dating = 0 ORDER BY RAND() LIMIT 8";
+            $likesSql = "SELECT u.* FROM users u JOIN likes l ON u.user_id = l.user_id WHERE l.liked_user_id = :loggedInUserId AND u.currently_dating = 0 AND u.is_private = 0 ORDER BY RAND() LIMIT 8";
             $stmt = $conn->prepare($likesSql);
             $stmt->execute(['loggedInUserId' => $loggedInUserId]);
             $usersWhoLikedLoggedInUser = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -89,13 +89,6 @@ $hasDateRequest = false;
                 echo '</div>';
             }
         }
-
-        
-        
-
-
-        // 4. 断る、キャンセルボタンを作成する
-        // option 1. デート申請を送ったユーザーを取得（デートボタンの非表示）
         
     ?>
     <script>
