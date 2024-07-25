@@ -9,6 +9,10 @@ if (isset($_SESSION['noLogin'])) {
     SESSION_destroy();
 }
 
+if(isset($_SESSION['user_id'])) {
+    header('Location: home.php');
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_type'])) {
     $formType = $_POST['form_type'];
     $email = $_POST['email'];

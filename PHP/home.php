@@ -17,17 +17,14 @@ $school_id = $stmt->fetchColumn();
 
 <!-- 検索欄 -->
 <div class="contant">
-<form action="search.php" method="get" class="mb-4 search">
-    <div class="input-group">
-        <input type="text" name="school_name" id="school_name" class="form-control" placeholder="学校名を入力">
-    </div>
-</form>
-
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="../js/search.js"></script>
-<div id="school_predictions">
-</div>
-
+        <form id="schoolSearchForm" action="search.php" method="get" class="mb-4 search">
+            <div class="input-group">
+                <input type="text" name="school_name" id="school_name" class="form-control" placeholder="学校名を入力">
+            </div>
+        </form>
+        <div id="school_predictions"></div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="../js/search.js"></script>
 <!-- 検索欄ここまで-->
 
 <!-- ユーザー表示 -->
@@ -87,17 +84,17 @@ $school_id = $stmt->fetchColumn();
     ?>
 </div>
 <style>
-    .contant{
+    .content {
         height: 100vh;
         padding: 15px 20px;
         overflow: scroll;
-      /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
+        /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
         -ms-overflow-style: none;
         /*Firefoxへの対応*/
         scrollbar-width: none;
     }
-        /*Google Chrome、Safariへの対応*/
-    .message_area::-webkit-scrollbar {
+    /*Google Chrome、Safariへの対応*/
+    .content::-webkit-scrollbar {
         display: none;
     }
     .content .search {
@@ -107,8 +104,16 @@ $school_id = $stmt->fetchColumn();
     .user_cards {
         display: flex;
         padding: 10px;
-        overflow-X: scrol;
+        overflow-x: scroll;
         margin-bottom: 30px;
+        /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
+        -ms-overflow-style: none;
+        /*Firefoxへの対応*/
+        scrollbar-width: none;
+    }
+    /*Google Chrome、Safariへの対応*/
+    .user_cards::-webkit-scrollbar {
+        display: none;
     }
     .user_card {
         position: relative;
@@ -122,19 +127,24 @@ $school_id = $stmt->fetchColumn();
     }
     .user_card img {
         border-radius: 50%;
-        height:100px;
+        height: 100px;
         width: 100px;
         object-fit: cover;
         margin: 15px auto 0 auto;
     }
     .card-body {
         text-align: right;
+
+        font-weight: 400;
+        padding: 20px;
+
         font-weight: 400px;
         background:white;
         border: none;
         position: relative;
         transform: translateY(30%);
         width: 80%;
+
     }
     .like-btn {
         position:absolute;
@@ -144,6 +154,7 @@ $school_id = $stmt->fetchColumn();
         border: none;
         color: #e62748;
         text-align: right;
+        cursor: pointer;
     }
     .card-body .user_name {
         font-size: 23px;
@@ -152,6 +163,8 @@ $school_id = $stmt->fetchColumn();
     }
     .card-body .school {
         font-size: 13px;
+        text-align: center;
     }
 </style>
+
 <?php require './common/footer.php'; ?>

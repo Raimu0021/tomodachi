@@ -77,9 +77,9 @@ function isLikedByUser($user_id, $current_user_id) {
     }
 
     try {
-        $stmt = $conn->prepare("SELECT COUNT(*) FROM likes WHERE liked_user_id = :user_id AND liking_user_id = :current_user_id");
-        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-        $stmt->bindParam(':current_user_id', $current_user_id, PDO::PARAM_INT);
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM likes WHERE liked_user_id = :user_id AND user_id = :current_user_id");
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->bindParam(':current_user_id', $current_user_id);
         $stmt->execute();
 
         return $stmt->fetchColumn() > 0;
