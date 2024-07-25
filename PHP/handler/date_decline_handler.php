@@ -14,13 +14,13 @@ $requestData = json_decode(file_get_contents('php://input'), true);
 $sender_id = $requestData['sender_id'];
 $receiver_id = $requestData['receiver_id'];
 
-// datesのこのペアのis_hiddenを1にする
+// datesのこのペアのis_pendingを0にする
 $stmt = $conn->prepare("SELECT * FROM dates WHERE (sender_id = :sender_id AND receiver_id = :receiver_id) OR (sender_id = :receiver_id AND receiver_id = :sender_id)");
 $stmt->execute([':sender_id' => $sender_id, ':receiver_id' => $receiver_id]);
 $result = $stmt->fetchAll();
 
 $row = $result[0];
-$updateStmt = $conn->prepare("UPDATE dates SET is_hidden = 1, is_pending = 0 WHERE date_id = :date_id");
+$updateStmt = $conn->prepare("UPDATE dates SET is_pending = 0 WHERE date_id = :date_id");
 $updateStmt->execute([':date_id' => $row['date_id']]);
 
 echo json_encode(['message' => 'デートリクエストの処理が完了しました。']);

@@ -27,7 +27,7 @@ $hasDateRequest = false;
         }
         //ここまで
 
-        // ログインユーザーがデート中でない場合        
+        // ユーザーがログインしている場合
         if($loggedInUser != null) {
 
             // ログインユーザーのIDをセッションから取得
@@ -103,7 +103,11 @@ $hasDateRequest = false;
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
+            if (data.error) {
+                alert('エラー: ' + data.error);
+            } else {
+                alert('デートリクエストが送信されました。');
+            }
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -113,16 +117,20 @@ $hasDateRequest = false;
     function declineDate(sender_id, receiver_id){
         // AJAXリクエストをバックエンドに送信
         fetch('handler/date_decline_handler.php',{
-          method: 'POST',
-          headers: {
+        method: 'POST',
+        headers: {
             'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ sender_id: sender_id, receiver_id: receiver_id }),
+        },
+        body: JSON.stringify({ sender_id: sender_id, receiver_id: receiver_id }),
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:',data);
-        })
+        if (data.error) {
+            alert('エラー: ' + data.error);
+        } else {
+            alert('デートリクエストを拒否しました。');
+        }
+    })
         .catch((error) =>{
             console.error('Error:', error);
         });
