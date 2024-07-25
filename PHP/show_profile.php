@@ -53,6 +53,9 @@ $profileBio = isset($profile['self_introduction']) && !empty($profile['self_intr
 
     <link rel="stylesheet" href="../CSS/profile.css">
     <div class="content">
+    <div class="back-link">
+            <a href="home.php" class="btn btn-secondary">戻る</a>
+        </div>
             <div class="login-form">
                 <?php if (!empty($message)): ?>
                     <div class="message"><?php echo htmlspecialchars($message); ?></div>

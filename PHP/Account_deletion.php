@@ -69,6 +69,9 @@ $conn = null;
     <?php
     require 'common/header.php';
     ?>
+    <div class="back-link">
+            <a href="setting.php" class="btn btn-secondary">戻る</a>
+        </div>
     <div class="login-field">
         <div class="login-background">
             <div class="login-title">
