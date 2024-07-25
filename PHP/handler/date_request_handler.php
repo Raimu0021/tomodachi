@@ -1,35 +1,60 @@
 <?php
-include 'db-connect.php'; // データベース接続ファイルをインクルード
+header('Content-Type: application/json'); // すべてのレスポンスをJSON形式で返す
 
-$requestData = json_decode(file_get_contents('php://input'), true);
-$userId = $requestData['userId'];
-$partnerId = $requestData['partnerId'];
+include '../common/db-connect.php'; // データベース接続ファイルをインクルード
 
-// 1. データベースに自分と相手のペアが存在するか確認
-$stmt = $conn->prepare("SELECT * FROM dates WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)");
-$stmt->bind_param("iiii", $userId, $partnerId, $partnerId, $userId);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    // ペアが存在しない場合、新規登録
-    $insertStmt = $conn->prepare("INSERT INTO dates (sender_id, receiver_id, is_hidden) VALUES (?, ?, 0)");
-    $insertStmt->bind_param("ii", $userId, $partnerId);
-    $insertStmt->execute();
-} else {
-    // ペアが存在するがis_hiddenが1の場合、is_hiddenを0に更新
-    $row = $result->fetch_assoc();
-    if ($row['is_hidden'] == 1) {
-        $updateStmt = $conn->prepare("UPDATE dates SET is_hidden = 0 WHERE date_id = ?");
-        $updateStmt->bind_param("i", $row['date_id']);
-        $updateStmt->execute();
+try {
+    if (!$conn) {
+        echo json_encode(['error' => 'データベース接続に失敗しました。']);
+        exit;
     }
+    
+    $requestData = json_decode(file_get_contents('php://input'), true);
+    $sender_id = $requestData['sender_id'];
+    $receiver_id = $requestData['receiver_id'];
+    
+    // 1. データベースに自分と相手のペアが存在するか確認
+    $stmt = $conn->prepare("SELECT * FROM dates WHERE (sender_id = :sender_id AND receiver_id = :receiver_id) OR (sender_id = :receiver_id AND receiver_id = :sender_id)");
+    $stmt->execute([':sender_id' => $sender_id, ':receiver_id' => $receiver_id]);
+    $result = $stmt->fetchAll();
+    
+    $datingCheckStmt = $conn->prepare("SELECT user_id FROM users WHERE (user_id = :sender_id OR user_id = :receiver_id) AND currently_dating = 1");
+    $datingCheckStmt->execute([':sender_id' => $sender_id, ':receiver_id' => $receiver_id]);
+    $datingCheckResult = $datingCheckStmt->fetchAll();
+    
+    if (count($datingCheckResult) > 0) {
+        //どちらか一方がすでにデート中の場合、エラーメッセージを出力
+        echo json_encode(['error' => 'すでにデート中のユーザーがいます。']);
+        exit;
+    } else if (count($result) == 0) {
+        // ペアが存在しない場合、新規登録
+        $insertStmt = $conn->prepare("INSERT INTO dates (sender_id, receiver_id, is_dating, is_pending) VALUES (:sender_id, :receiver_id, 0, 1)");
+        $insertStmt->execute([':sender_id' => $sender_id, ':receiver_id' => $receiver_id]);
+    } else {
+        $row = $result[0];
+        if ($row['is_pending'] == 1) {
+            // is_pending = 1の場合にそれぞれのユーザーのcurrently_datingを1に更新
+            // is_pending = 0に変更
+            // is_dating = 1に変更
+            $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :sender_id");
+            $updateDatingStmt->execute([':sender_id' => $sender_id]);
+            $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :receiver_id");
+            $updateDatingStmt->execute([':receiver_id' => $receiver_id]);
+            $updateDatingStmt = $conn->prepare("UPDATE dates SET is_pending = 0, is_dating = 1 WHERE date_id = :date_id");
+            $updateDatingStmt->execute([':date_id' => $row['date_id']]);
+            echo json_encode(['success' => true, 'redirect' => 'date_evaluation.php']);
+            exit;
+        } else {
+            // どれにも当てはまらない場合、is_pending = 1に設定する
+            $updateDatingStmt = $conn->prepare("UPDATE dates SET is_pending = 1 WHERE date_id = :date_id");
+            $updateDatingStmt->execute([':date_id' => $row['date_id']]);
+        }
+    }
+
+    // 成功時のレスポンス
+    echo json_encode(['success' => true]);
+} catch (Exception $e) {
+    // エラー時のレスポンス
+    echo json_encode(['error' => $e->getMessage()]);
 }
-
-// 2. receiver_idに自分のIDがある場合、currently_datingを1に更新
-$updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = ?");
-$updateDatingStmt->bind_param("i", $userId);
-$updateDatingStmt->execute();
-
-echo json_encode(['message' => 'デートリクエストの処理が完了しました。']);
 ?>

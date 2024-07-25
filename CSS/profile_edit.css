@@ -1,80 +1,87 @@
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Quicksand', sans-serif;
-    background: linear-gradient(135deg, #9d56e5, #6f65f9, #4e7eff, #57a5ff, #6dcbff, #9af5ff);
-    background-size: 200% 200%;
-    animation: gradientAnimation 15s ease infinite;
+  margin: 0;
+  padding: 0;
+  font-family: "Quicksand", sans-serif;
+  background-size: 200% 200%;
+  animation: gradientAnimation 15s ease infinite;
 }
 
 @keyframes gradientAnimation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 #header {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    text-align: center;
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  text-align: center;
 }
 
-.container {
-    padding: 20px;
-    max-width: 500px; /* 横幅を狭める */
-    margin: 50px auto;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
+.contant {
+  padding: 20px;
+  max-width: 500px; /* 横幅を狭める */
+  margin: 50px auto;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.container h2 {
-    margin-bottom: 20px;
+.contant h2 {
+  margin-bottom: 20px;
 }
 
 .form-group {
-    margin-bottom: 15px;
-    text-align: left; /* ラベルと入力フィールドを左揃え */
+  margin-bottom: 15px;
+  text-align: left; /* ラベルと入力フィールドを左揃え */
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
+  display: block;
+  margin-bottom: 5px;
 }
 
-.form-group input, .form-group textarea, .form-group select {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 .form-group input[type="file"] {
-    padding: 3px;
+  padding: 3px;
 }
 
 .form-group textarea {
-    height: 100px;
+  height: 100px;
 }
 
 .current-image {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin-top: 10px;
-    object-fit: cover; /* 画像が枠に収まるように調整 */
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-top: 10px;
+  object-fit: cover; /* 画像が枠に収まるように調整 */
 }
 
 .back-link {
-    text-align: center;
-    margin-top: 20px;
+  text-align: center;
+  margin-top: 20px;
 }
 
 .back-link a {
-    text-decoration: none;
-    color: white;
-    background-color: #333;
-    padding: 10px 20px;
-    border-radius: 5px;
+  text-decoration: none;
+  color: white;
+  background-color: #333;
+  padding: 10px 20px;
+  border-radius: 5px;
 }

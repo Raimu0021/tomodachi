@@ -88,7 +88,7 @@ if (isset($_SESSION['user_id'])) {
     <?php
     require 'common/header.php';
     ?>
-    <div class="container">
+    <div class="contant">
         <h2>プロフィール編集</h2>
         <?php if (!empty($message)): ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($message); ?></div>
@@ -132,9 +132,6 @@ if (isset($_SESSION['user_id'])) {
                 <button type="submit" class="btn btn-primary">保存</button>
             </div>
         </form>
-        <div class="back-link">
-            <a href="profile.php" class="btn btn-secondary">戻る</a>
-        </div>
     </div>
     <script>
         document.getElementById('profile_image').addEventListener('change', function(event) {

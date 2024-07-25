@@ -1,14 +1,29 @@
 <?php
 
 // db-connect.phpと一緒に読み込むように　（学校名が表示されません）
-function renderDateCard($sender_id, $receiver_id, $profile_image, $user_name, $date_of_birth, $gender, $school_id) {
+function renderDateCard($sender_id, $receiver_id, $profile_image, $user_name, $date_of_birth, $gender, $school_id ,$hasDateRequest) {
     
     $profile_image = $profile_image ? $profile_image :'../img/default-avatar.webp';
     $age = calculateAge($date_of_birth);
     $gender = convertGenderToJapanese($gender);
     $school = getSchoolName($school_id);
 
+//$hasDateRequestがtrueなら断るボタンがつく
+    if($hasDateRequest){
     echo "
+    <div class='card'>
+        <img src='$profile_image' alt='$user_name'>
+        <div class='card-body'>
+            <h2>$user_name</h2>
+            
+            <p>$age 歳/$gender</p>
+            <p>$school</p>
+            <button onclick='requestDate($sender_id, $receiver_id)'>デート！</button>
+            <button onclick='declineDate($sender_id, $receiver_id)'>断る</button>
+        </div>
+    </div>";
+    }else{
+        echo "
     <div class='card'>
         <img src='$profile_image' alt='$user_name'>
         <div class='card-body'>
@@ -20,6 +35,7 @@ function renderDateCard($sender_id, $receiver_id, $profile_image, $user_name, $d
 
         </div>
     </div>";
+    }
 }
 
 function calculateAge($date_of_birth){

@@ -44,8 +44,8 @@ if(!isset($_SESSION['user_id'])){
         </a>
         <ul>
             <li><a href="./home.php"><img src="../CSS/icon_home.png" alt="ホーム">ホーム</a></li>
-            <li><a href="#" id="noti"><img src="../CSS/icon_notification.png" alt="通知">通知</a></li>
-            <li><a href="./date.php"><img src="../CSS/icon_date.png" alt="デート">デート</a></li>
+            <li><a href="./date.php"><img src="../CSS/icon_date.png" alt="デート">いいね</a></li>
+            <li><div id="noti"><img src="../CSS/icon_notification.png" alt="通知">通知</div></li>
             <li><a href="./chat.php"><img src="../CSS/icon_message.png" alt="メッセージ">メッセージ</a></li>
             <li><a href="./setting.php"><img src="../CSS/icon_setting.png" alt="設定">設定</a></li>
             <li id="user"><a href="./profile.php"><img src="<?php echo $user['profile_image']?>" alt=""><?php echo $user['user_name']?></a></li>

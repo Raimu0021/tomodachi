@@ -37,7 +37,8 @@
   height: 50px;
 }
 
-.sidebar ul li a {
+.sidebar ul li a,
+.sidebar ul li div {
   display: block;
   color: black;
   text-decoration: none;
@@ -50,7 +51,8 @@
   margin-right: 10px;
 }
 
-.sidebar ul li a:hover {
+.sidebar ul li a:hover,
+.sidebar ul li div:hover {
   background-color: #dadada;
 }
 
