@@ -117,11 +117,11 @@ $hasDateRequest = false;
     function declineDate(sender_id, receiver_id){
         // AJAXリクエストをバックエンドに送信
         fetch('handler/date_decline_handler.php',{
-          method: 'POST',
-          headers: {
+        method: 'POST',
+        headers: {
             'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ sender_id: sender_id, receiver_id: receiver_id }),
+        },
+        body: JSON.stringify({ sender_id: sender_id, receiver_id: receiver_id }),
         })
         .then(response => response.json())
         .then(data => {
