@@ -19,12 +19,23 @@ if ($sender_id == null) {
   exit;
 }
 
-// currently_dating = 1
+// currently_datingの値を取得
+$stmt = $conn->prepare("SELECT currently_dating FROM users WHERE user_id = :sender_id");
+$stmt->execute(['sender_id' => $sender_id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// currently_datingが0の場合、date.phpにリダイレクト
+if ($user['currently_dating'] == 0) {
+  header('Location: date.php'); 
+  exit;
+}
+
+// reciever_idの値を取得
 $stmt = $conn->prepare("SELECT sender_id, receiver_id FROM dates WHERE is_dating = 1 AND (sender_id = :sender_id OR receiver_id = :sender_id)");
         $stmt->execute(['sender_id' => $sender_id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        
+
 $reciever_id;
         if ($result['sender_id'] != $sender_id) {
             $receiver_id = $result['receiver_id'];
