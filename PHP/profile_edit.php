@@ -88,7 +88,7 @@ if (isset($_SESSION['user_id'])) {
     <?php
     require 'common/header.php';
     ?>
-    <div class="container">
+    <div class="contant">
         <h2>プロフィール編集</h2>
         <?php if (!empty($message)): ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($message); ?></div>

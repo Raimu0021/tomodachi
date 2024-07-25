@@ -27,6 +27,18 @@ body {
 body > *:not(.sidebar) {
   margin-left: 300px; /* ナビゲーションバーの幅と同じ */
 }
+.contant {
+  height: 100vh;
+  overflow: scroll;
+  /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
+  -ms-overflow-style: none;
+  /*Firefoxへの対応*/
+  scrollbar-width: none;
+}
+/*Google Chrome、Safariへの対応*/
+.message_area::-webkit-scrollbar {
+  display: none;
+}
 
 .notification {
   position: absolute;
