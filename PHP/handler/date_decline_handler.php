@@ -20,7 +20,7 @@ $stmt->execute([':sender_id' => $sender_id, ':receiver_id' => $receiver_id]);
 $result = $stmt->fetchAll();
 
 $row = $result[0];
-$updateStmt = $conn->prepare("UPDATE dates SET is_hidden = 1 WHERE date_id = :date_id");
+$updateStmt = $conn->prepare("UPDATE dates SET is_hidden = 1, is_pending = 0 WHERE date_id = :date_id");
 $updateStmt->execute([':date_id' => $row['date_id']]);
 
 echo json_encode(['message' => 'デートリクエストの処理が完了しました。']);

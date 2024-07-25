@@ -25,8 +25,8 @@ if (count($result) == 0) {
     
     $row = $result[0];
     if ($row['is_hidden'] == 1) {
-        // ペアが存在するがis_hiddenが1の場合、is_hiddenを0に更新
-        $updateDatingStmt = $conn->prepare("UPDATE dates SET is_hidden = 0 WHERE date_id = :date_id");
+        // ペアが存在するがis_hiddenが1の場合、is_hiddenを0に更新、is_pending = 1に設定する
+        $updateDatingStmt = $conn->prepare("UPDATE dates SET is_hidden = 0, is_pending = 1 WHERE date_id = :date_id");
         $updateDatingStmt->execute([':date_id' => $row['date_id']]);
     }else if($row['is_pending'] == 1){
         //  is_pending = 1の場合にそれぞれのユーザーのcurrently_datingを1に更新
