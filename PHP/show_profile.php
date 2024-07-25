@@ -71,9 +71,11 @@ $profileBio = isset($profile['self_introduction']) && !empty($profile['self_intr
                             <p id="profileBio"><?= $profileBio ?></p>
                         </div>
                         <div class="profile-actions">
-                            <a href="profile_edit.php" class="edit-profile-button">プロフィールを編集</a>
-                            <form action="login-logout.php" method="POST" style="display:inline;">
-                                <button type="submit" class="logout-button" name="logout">ログアウトする</button>
+                            <a href="home.php" class="edit-profile-button">戻る</a>
+                            <form action="chat.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="partner_id" value="<?php echo $user_id;?>">
+                                <input type="hidden" name="partner_name" value="<?php echo $profileName;?>">
+                                <button type="submit" class="logout-button" name="open_chat">チャット</button>
                             </form>
                         </div>
                     </div>
