@@ -39,10 +39,10 @@ $result = $stmt->fetchAll();
             $updateDatingStmt->execute([':sender_id' => $sender_id]);
             $updateDatingStmt = $conn->prepare("UPDATE users SET currently_dating = 1 WHERE user_id = :receiver_id");
             $updateDatingStmt->execute([':receiver_id' => $receiver_id]);
-            $updateDatingStmt = $conn->prepare("UPDATE dates SET is_pending = 0 WHERE date_id = :date_id");
+            $updateDatingStmt = $conn->prepare("UPDATE dates SET is_pending = 0, is_dating = 1 WHERE date_id = :date_id");
             $updateDatingStmt->execute([':date_id' => $row['date_id']]);
-            $updateDatingStmt = $conn->prepare("UPDATE dates SET is_dating = 1 WHERE date_id = :date_id");
-            $updateDatingStmt->execute([':date_id' => $row['date_id']]);
+            header("Location: date_evaluation.php");
+            exit();
         }else{
             //　どれにも当てはまらない場合、is_pending = 1に設定する
             $updateDatingStmt = $conn->prepare("UPDATE dates SET is_pending = 1 WHERE date_id = :date_id");

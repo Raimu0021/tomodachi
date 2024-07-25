@@ -103,7 +103,11 @@ $hasDateRequest = false;
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
+            if (data.error) {
+                alert('エラー: ' + data.error);
+            } else {
+                alert('デートリクエストが送信されました。');
+            }
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -121,8 +125,12 @@ $hasDateRequest = false;
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:',data);
-        })
+        if (data.error) {
+            alert('エラー: ' + data.error);
+        } else {
+            alert('デートリクエストを拒否しました。');
+        }
+    })
         .catch((error) =>{
             console.error('Error:', error);
         });
