@@ -134,10 +134,7 @@ $school_id = $stmt->fetchColumn();
     }
     .card-body {
         text-align: right;
-
         font-weight: 400;
-        padding: 20px;
-
         font-weight: 400px;
         background:white;
         border: none;
