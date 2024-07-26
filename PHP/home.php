@@ -84,7 +84,7 @@ $school_id = $stmt->fetchColumn();
     ?>
 </div>
 <style>
-    .content {
+    .contant {
         height: 100vh;
         padding: 15px 20px;
         overflow: scroll;
@@ -94,10 +94,10 @@ $school_id = $stmt->fetchColumn();
         scrollbar-width: none;
     }
     /*Google Chrome、Safariへの対応*/
-    .content::-webkit-scrollbar {
+    .contant::-webkit-scrollbar {
         display: none;
     }
-    .content .search {
+    .contat .search {
         width: 80%;
         margin: 10px auto 0 auto;
     }
